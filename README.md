@@ -1,7 +1,7 @@
 
 # OTUS Linux admin course
 
-## HW1 Linux Kernel
+## HW-1 Linux Kernel
 
 ### Setup vagrant
 
@@ -23,7 +23,7 @@ make modules_install
 
 ### Results 
 
-See files .config and yum.log
+See files [.config](.config) and [yum.log](yum.log)
 
 
 # Инструкции
