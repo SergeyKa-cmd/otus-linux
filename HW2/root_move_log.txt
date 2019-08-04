@@ -1,0 +1,193 @@
+#############################################
+# Prepare for raid
+
+[root@otuslinux vagrant]# dd if=/dev/sda1 of=/dev/md0 bs=4k
+10485504+0 records in
+10485504+0 records out
+42948624384 bytes (43 GB) copied, 159.29 s, 270 MB/s
+[root@otuslinux vagrant]# mount /dev/md0 /mnt
+mount: wrong fs type, bad option, bad superblock on /dev/md0,
+       missing codepage or helper program, or other error
+
+       In some cases useful info is found in syslog - try
+       dmesg | tail or so.
+[root@otuslinux vagrant]# xfs_admin -U generate /dev/md0
+Clearing log and setting UUID
+writing all SBs
+new UUID = ac151f73-f89a-4d1e-bc61-e8b4afcadfb0
+
+
+[root@otuslinux mnt]# lsblk
+NAME    MAJ:MIN RM SIZE RO TYPE  MOUNTPOINT
+sda       8:0    0  40G  0 disk  
+`-sda1    8:1    0  40G  0 part  /
+sdb       8:16   0  42G  0 disk  
+`-sdb1    8:17   0  42G  0 part  
+  `-md0   9:0    0  42G  0 raid1 /mnt
+sdc       8:32   0  42G  0 disk  
+
+[root@otuslinux vagrant]# mdadm --detail --scan --verbose | awk '/ARRAY/ {print}' 
+ARRAY /dev/md/0 level=raid1 num-devices=2 metadata=0.90 UUID=d029ec14:a4623ec7:8ed4a3a1:9f626544
+[root@otuslinux vagrant]# mdadm --detail --scan --verbose | awk '/ARRAY/ {print}' >> /mnt/etc/mdadm.conf
+
+[root@otuslinux vagrant]# mount --rbind /proc /mnt/proc
+[root@otuslinux vagrant]# mount --rbind /dev /mnt/dev
+[root@otuslinux vagrant]# mount --rbind /sys /mnt/sys
+
+[vagrant@otuslinux ~]$ ll /dev/disk/by-uuid/
+total 0
+lrwxrwxrwx 1 root root 10 Aug  3 22:23 8ac075e3-1124-4bb6-bef7-a6811bf8b870 -> ../../sda1
+lrwxrwxrwx 1 root root  9 Aug  3 22:23 ac151f73-f89a-4d1e-bc61-e8b4afcadfb0 -> ../../md0
+
+
+##########################################################
+# CHROOT and create initramfs and grub config
+
+[root@otuslinux vagrant]# chroot /mnt
+
+[vagrant@otuslinux ~]$  cat /etc/fstab 
+
+#
+# /etc/fstab
+# Created by anaconda on Sat Jun  1 17:13:31 2019
+#
+# Accessible filesystems, by reference, are maintained under '/dev/disk'
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+#
+/dev/md0 /                       xfs     defaults        0 0
+/swapfile none swap defaults 0 0
+
+
+[root@otuslinux /]# vi /etc/default/grub
+[root@otuslinux /]# grep rd.auto=1 /etc/default/grub 
+GRUB_CMDLINE_LINUX="no_timer_check console=tty0 console=ttyS0,115200n8 net.ifnames=0 biosdevname=0 elevator=noop crashkernel=auto rd.auto=1"
+
+[root@otuslinux /]# grub2-mkconfig -o /boot/grub2/grub.cfg && grub2-install /dev/sdb
+Generating grub configuration file ...
+/usr/sbin/grub2-probe: warning: Couldn't find physical volume `(null)'. Some modules may be missing from core image..
+Found linux image: /boot/vmlinuz-3.10.0-957.12.2.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-957.12.2.el7.x86_64.img
+/usr/sbin/grub2-probe: warning: Couldn't find physical volume `(null)'. Some modules may be missing from core image..
+/usr/sbin/grub2-probe: warning: Couldn't find physical volume `(null)'. Some modules may be missing from core image..
+/usr/sbin/grub2-probe: warning: Couldn't find physical volume `(null)'. Some modules may be missing from core image..
+/usr/sbin/grub2-probe: warning: Couldn't find physical volume `(null)'. Some modules may be missing from core image..
+done
+Installing for i386-pc platform.
+grub2-install: warning: Couldn't find physical volume `(null)'. Some modules may be missing from core image..
+grub2-install: warning: Couldn't find physical volume `(null)'. Some modules may be missing from core image..
+Installation finished. No error reported.
+
+
+[root@otuslinux vagrant]# reboot
+
+############################################33
+# Boot from raid disk and add second disk 
+
+[vagrant@otuslinux ~]$ lsblk
+NAME    MAJ:MIN RM SIZE RO TYPE  MOUNTPOINT
+sda       8:0    0  40G  0 disk  
+`-sda1    8:1    0  40G  0 part  
+sdb       8:16   0  42G  0 disk  
+`-sdb1    8:17   0  42G  0 part  
+  `-md0   9:0    0  42G  0 raid1 /
+sdc       8:32   0  42G  0 disk  
+
+root@otuslinux vagrant]# mdadm --manage /dev/md0 --add /dev/sda1
+mdadm: hot add failed for /dev/sda1: No space left on device
+[root@otuslinux vagrant]# mdadm --manage /dev/md0 --add /dev/sdc1
+mdadm: stat failed for /dev/sdc1: No such file or directory
+
+[root@otuslinux vagrant]# sfdisk -d /dev/sdb | sfdisk /dev/sdc
+Checking that no-one is using this disk right now ...
+OK
+
+Disk /dev/sdc: 5482 cylinders, 255 heads, 63 sectors/track
+sfdisk:  /dev/sdc: unrecognized partition table type
+
+Old situation:
+sfdisk: No partitions found
+
+New situation:
+Units: sectors of 512 bytes, counting from 0
+
+   Device Boot    Start       End   #sectors  Id  System
+/dev/sdc1          2048  88080383   88078336  83  Linux
+/dev/sdc2             0         -          0   0  Empty
+/dev/sdc3             0         -          0   0  Empty
+/dev/sdc4             0         -          0   0  Empty
+Warning: partition 1 does not end at a cylinder boundary
+Warning: no primary partition is marked bootable (active)
+This does not matter for LILO, but the DOS MBR will not boot this disk.
+Successfully wrote the new partition table
+
+Re-reading the partition table ...
+
+If you created or changed a DOS partition, /dev/foo7, say, then use dd(1)
+to zero the first 512 bytes:  dd if=/dev/zero of=/dev/foo7 bs=512 count=1
+(See fdisk(8).)
+[root@otuslinux vagrant]# lsblk
+NAME    MAJ:MIN RM SIZE RO TYPE  MOUNTPOINT
+sda       8:0    0  40G  0 disk  
+`-sda1    8:1    0  40G  0 part  
+sdb       8:16   0  42G  0 disk  
+`-sdb1    8:17   0  42G  0 part  
+  `-md0   9:0    0  42G  0 raid1 /
+sdc       8:32   0  42G  0 disk  
+`-sdc1    8:33   0  42G  0 part  
+[root@otuslinux vagrant]# mdadm --manage /dev/md0 --add /dev/sdc1
+mdadm: hot added /dev/sdc1
+[root@otuslinux vagrant]# cat /proc/mdstat 
+Personalities : [raid1] 
+md0 : active raid1 sdc1[2] sdb1[0]
+      44039104 blocks [2/1] [U_]
+      [>....................]  recovery =  1.9% (859648/44039104) finish=7.5min speed=95516K/sec
+      
+unused devices: <none>
+
+[root@otuslinux vagrant]# cat /proc/mdstat 
+Personalities : [raid1] 
+md0 : active raid1 sdc1[2] sdb1[0]
+      44039104 blocks [2/1] [U_]
+      [=======>.............]  recovery = 38.1% (16794880/44039104) finish=5.1min speed=88132K/sec
+      
+unused devices: <none>
+[root@otuslinux vagrant]# cat /proc/mdstat 
+Personalities : [raid1] 
+md0 : active raid1 sdc1[1] sdb1[0]
+      44039104 blocks [2/2] [UU]
+      
+unused devices: <none>
+
+
+[root@otuslinux vagrant]# grub2-install /dev/sdc
+Installing for i386-pc platform.
+Installation finished. No error reported.
+
+[root@otuslinux vagrant]# cat /proc/mdstat 
+Personalities : [raid1] 
+md0 : active raid1 sdc1[1] sdb1[0]
+      44039104 blocks [2/2] [UU]
+      
+unused devices: <none>
+
+#############################################
+# Test boot from another disk of mirror
+
+[vagrant@otuslinux ~]$ lsblk
+NAME    MAJ:MIN RM SIZE RO TYPE  MOUNTPOINT
+sda       8:0    0  40G  0 disk  
+`-sda1    8:1    0  40G  0 part  
+sdb       8:16   0  42G  0 disk  
+`-sdb1    8:17   0  42G  0 part  
+  `-md0   9:0    0  42G  0 raid1 /
+sdc       8:32   0  42G  0 disk  
+`-sdc1    8:33   0  42G  0 part  
+  `-md0   9:0    0  42G  0 raid1 /
+[vagrant@otuslinux ~]$ df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/md0         40G  2.9G   38G   8% /
+devtmpfs        488M     0  488M   0% /dev
+tmpfs           496M     0  496M   0% /dev/shm
+tmpfs           496M  6.7M  489M   2% /run
+tmpfs           496M     0  496M   0% /sys/fs/cgroup
+tmpfs           100M     0  100M   0% /run/user/1000

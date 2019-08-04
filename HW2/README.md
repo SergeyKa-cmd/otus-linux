@@ -289,3 +289,5 @@ fdisk /dev/sdc (change by t:  id 83 on fd )
 mdadm --manage /dev/md0 --add /dev/sdc1
 grub2-install /dev/sdc
 ```
+
+#### Example ofc console log from real system can be seen here [root_move_log.txt](root_move_log.txt)
