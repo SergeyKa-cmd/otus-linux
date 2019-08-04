@@ -258,7 +258,7 @@ rsync -avx  --delete --exclude /dev --exclude /mnt --exclude /proc --exclude /ru
 ```
 or
 ```
-dd if=/dev/sda of=/dev/sdb bs=4k
+dd if=/dev/sda of=/dev/md0 bs=4k
 xfs_admin -U generate /dev/md0
 ```
 
@@ -271,6 +271,10 @@ mount --bind /proc /mnt/proc && mount --bind /dev /mnt/dev && mount --bind /sys 
 ```
 blkid | grep /dev/md
 sed -i 's/old_UUID/new_UUID/g' /mnt/etc/fstab
+```
+or
+```
+sed -i 's/UUID=old_UUID/\/dev\/md0/g' /mnt/etc/fstab
 ```
 
 #### Set new config and create new initrd and grub
@@ -290,4 +294,4 @@ mdadm --manage /dev/md0 --add /dev/sdc1
 grub2-install /dev/sdc
 ```
 
-#### Example ofc console log from real system can be seen here [root_move_log.txt](root_move_log.txt)
+#### Example of console log from real system can be seen here [root_move_log.txt](root_move_log.txt)
