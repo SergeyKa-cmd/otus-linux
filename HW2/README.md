@@ -4,9 +4,13 @@
 ## HW-2 Disk system
 
 Useful commands: 
+
 ● fdisk -l
+
 ● lsblk
+
 ● lshw
+
 ● lsscsi
 
 ### mdadm
@@ -153,6 +157,21 @@ Consistency Policy : resync
        5       8       64        3      active sync   /dev/sde
        4       8       80        4      active sync   /dev/sdf
 ```
+
+#### Script for configure RAID
+
+```
+[vagrant@otuslinux ~]$ cat /tmp/raid.sh
+!#/bin/bash
+
+sudo mdadm --zero-superblock --force /dev/sd{b,c,d,e,f}
+sudo mdadm --create --verbose /dev/md0 -l 6 -n 5 /dev/sd{b,c,d,e,f}
+sudo mkdir /etc/mdadm
+sudo chmod o+w /etc/mdadm
+sudo echo "DEVICE partitions" > /etc/mdadm/mdadm.conf
+sudo mdadm --detail --scan --verbose | awk '/ARRAY/ {print}' >> /etc/mdadm/mdadm.conf
+```
+
 ### Create GPT partitions
 
 ```
@@ -201,4 +220,72 @@ tmpfs           100M     0  100M   0% /run/user/1000
 /dev/md0p3      142M  1.6M  130M   2% /raid/part3
 /dev/md0p4      140M  1.6M  128M   2% /raid/part4
 /dev/md0p5      139M  1.6M  127M   2% /raid/part5
+```
+
+
+
+### Move root on RAID (CentOS)
+
+#### Turn off SElinux before if it`s on.
+```
+Edit the /etc/selinux/config file to set the  SELINUX parameter to  disabled, and then reboot the server.
+```
+
+#### Create partition
+```
+parted /dev/sdb mklabel
+parted /dev/sdb mkpart primary ext4 0% 100%
+```
+or
+```
+sfdisk -d /dev/sda | sfdisk /dev/sdb
+fdisk /dev/sdb (change by t:  id 83 on fd )
+```
+
+#### Create raid1 on one disk
+```
+mdadm --create --verbose /dev/md0 --level=mirror --raid-devices=2 --metadata=0.90 missing /dev/sdb1
+mkfs.ext4 /dev/md0
+```
+
+#### Mount and copy data
+```
+mount /dev/md0 /mnt
+cd /mnt
+mkdir -p dev/ mnt/ proc/ sys/ run/
+rsync -avx -n --delete --exclude /dev --exclude /mnt --exclude /proc --exclude /run --exclude /sys / /mnt
+rsync -avx  --delete --exclude /dev --exclude /mnt --exclude /proc --exclude /run --exclude /sys / /mnt
+```
+or
+```
+dd if=/dev/sda of=/dev/sdb bs=4k
+xfs_admin -U generate /dev/md0
+```
+
+#### Mount new partition for chroot
+```
+mount --bind /proc /mnt/proc && mount --bind /dev /mnt/dev && mount --bind /sys /mnt/sys && mount --bind /run /mnt/run && chroot /mnt/
+```
+
+#### Change UUID in fstab
+```
+blkid | grep /dev/md
+sed -i 's/old_UUID/new_UUID/g' /mnt/etc/fstab
+```
+
+#### Set new config and create new initrd and grub
+```
+mdadm --detail --scan > /etc/mdadm.conf
+vim /etc/default/grub (add rd.auto=1 to GRUB_CMDLINE_LINUX)
+grub2-mkconfig -o /boot/grub2/grub.cfg && grub2-install /dev/sdb
+dracut --force
+touch /SECOND_DISK
+reboot
+```
+
+#### After reboot add second disk to raid
+```
+fdisk /dev/sdc (change by t:  id 83 on fd )
+mdadm --manage /dev/md0 --add /dev/sdc1
+grub2-install /dev/sdc
 ```
