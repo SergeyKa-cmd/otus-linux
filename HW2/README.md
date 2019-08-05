@@ -5,13 +5,13 @@
 
 Useful commands: 
 
+```
 ● fdisk -l
-
 ● lsblk
-
 ● lshw
-
 ● lsscsi
+● blkid
+```
 
 ### mdadm
 
