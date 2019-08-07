@@ -196,8 +196,7 @@ Do you really want to remove active logical volume vg_root/lv_root? [y/n]: y
   Labels on physical volume "/dev/sdb" successfully wiped.
 ```
 
-#### Move home on volume
-
+#### Move home on lvm volume
 
 ```
 [root@otuslinux vagrant]#  lvcreate -n LogVol_Home -L 2G /dev/VolGroup00
@@ -233,6 +232,7 @@ tmpfs                               496M     0  496M   0% /sys/fs/cgroup
 ```
 
 #### Playing with snapshoot
+
 ```
 [root@otuslinux vagrant]#  touch /home/file{1..20}
 [root@otuslinux vagrant]#  lvcreate -L 100MB -s -n home_snap /dev/VolGroup00/LogVol_Home
@@ -247,7 +247,8 @@ tmpfs                               496M     0  496M   0% /sys/fs/cgroup
 [root@otuslinux vagrant]# ls /home/
 file1  file10  file11  file12  file13  file14  file15  file16  file17  file18  file19  file2  file20  file3  file4  file5  file6  file7  file8  file9  vagrant
 ```
-#### Result
+
+#### Results
 
 ```
 [root@otuslinux vagrant]# df -h
@@ -304,6 +305,11 @@ Minumum free space for volume must be more then 20% or you`ll have performance d
 ...
 [root@otuslinux vagrant]# reboot
 
+```
+
+#### Create pool and volume
+
+```
 [root@otuslinux vagrant]# zpool create testpool sdb sdc sdd
 [root@otuslinux vagrant]# zpool status
   pool: testpool
@@ -318,11 +324,7 @@ config:
 	  sdd       ONLINE       0     0     0
 
 errors: No known data errors
-```
 
-#### Create pool and volume
-
-```
 [root@otuslinux vagrant]# zfs create testpool/vol1
 
 [root@otuslinux vagrant]# zfl list
