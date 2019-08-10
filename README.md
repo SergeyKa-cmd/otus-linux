@@ -5,6 +5,7 @@
 
 * [HW-2 Disk system](HW2/README.md)
 
+* [HW-32 Disk system](HW3/README.md)
 
 # Инструкции
 

@@ -431,5 +431,3 @@ config:
 errors: No known data errors
 
 ```
-
-[root_move_log.txt](root_move_log.txt)
