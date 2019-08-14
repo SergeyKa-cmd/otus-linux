@@ -7,6 +7,8 @@
 
 * [HW-3 LVM and FS](HW3/README.md)
 
+* [HW-4 Bash scripting](HW4/README.md)
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)
