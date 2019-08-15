@@ -1,2 +1,2 @@
 # run nginx log analyser eveery hour
-* 1 * * * 	./nginx_la.sh
+0 1 * * * 	./nginx_la.sh
