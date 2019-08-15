@@ -76,22 +76,22 @@ get_errors(){
 }
 
 get_shift(){
-if [ -f $shiftfile ]; then
-    shift=`cat $shiftfile`
     filelong=`wc -l $logfile | awk '{print $1}'`
-    if [ $shift -gt $filelong ]; then
-        echo "Warning: Something goes wrong, starting from begin of log."
-        echo
-        shift="0"
+    if [ -f $shiftfile ]; then
+        shift=`cat $shiftfile`
+        if [ $shift -gt $filelong ]; then
+            echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            echo "Warning: Something goes wrong, starting from begin of log."
+            echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+            echo
+            shift="0"
+        else
+            shift+=1
+        fi
     else
-        shift+=1
-        wc -l $logfile | awk '{print $1}'> $shiftfile
+        shift="0"
     fi
-else
-    shift="0"
-    wc -l $logfile | awk '{print $1}'> $shiftfile
-
-fi
+    echo $filelong > $shiftfile
 }
 
 
@@ -109,7 +109,7 @@ else
 fi
 
 # send all output ot file
-exec &> $resultfile
+#exec &> $resultfile
 
 # if OFF then script try to calc shift 
 if [ $logrotate == "OFF" ]; then
@@ -130,7 +130,7 @@ get_errors
 echo "Log parsed"
 
 # send mail to recipient
-sendmail $usermail < $resultfile
+#sendmail $usermail < $resultfile
 
 # delete temp files
 clean_up
