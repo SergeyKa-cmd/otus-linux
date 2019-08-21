@@ -9,6 +9,8 @@
 
 * [HW-4 Bash scripting](HW4/README.md)
 
+* [HW-5 Processes and proc FS analysing](HW5/README.md)
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)
