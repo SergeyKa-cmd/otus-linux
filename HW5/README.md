@@ -5,9 +5,7 @@
 
 ### Script for analyse proc FS.
 
-Some simple script for analysing proccesses.
-
-Script [ps.sh](ps.sh)
+Some simple script [ps.sh](ps.sh) for analysing proccesses.
 
 Example of usage:
 ```
@@ -35,9 +33,7 @@ Held by 24248
 
 ### Script to see open files or process
 
-Some simple script for view open descriptors or which process open file.
-
-Script [lsof.sh](lsof.sh)
+Some simple script [lsof.sh](lsof.sh) for view open descriptors or which process open file.
 
 Example of usage:
 ```
@@ -71,7 +67,7 @@ socket:[82185]
 
 ### Processor concurency
 
-We have 8 cpu, so try run two script [stress.sh](stress.sh)  (high and low priority) simultaneously by clusterssh, and run 6 proccess 'yes > /dev/nul'.
+We have 8 cpu, so try run two script [stress.sh](stress.sh)  (high and low priority) simultaneously by clusterssh, and run 6 proccess `yes > /dev/nul`.
 
 ```
 top - 16:48:40 up 20 min,  3 users,  load average: 7,97, 3,75, 1,89
