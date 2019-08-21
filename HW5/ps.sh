@@ -2,8 +2,17 @@
 
 # Simple proccess state analyser
 
+# Variables 
 pids=(`ls /proc | grep -E "^[0-9]+$"|sort -n`)
 format="%10s %5s %5s %5s  %-20s\n"
+lockfile=/tmp/$0.lock
+
+# Functions
+
+clean_up() {
+	rm -f $lockfile
+	exit 255
+}
 
 get_users(){
     sp='/-\|'
@@ -34,8 +43,21 @@ print_stat(){
         fi
     done   
 }
- 
+
+# Main
+
+# set trap
+if ( set -o noclobber; echo "$$" > "$lockfile") 2> /dev/null;
+then
+    trap clean_up SIGHUP SIGINT SIGTERM
+else
+    echo "Failed to acquire lockfile: $lockfile."
+    echo "Held by $(cat $lockfile)"
+    exit 255
+fi
+
+
 get_users
 print_stat
-
+clean_up
 #echo ${pids[@]}

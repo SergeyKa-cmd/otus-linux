@@ -7,7 +7,7 @@
 
 Some simple script for analysing proccesses.
 
-Script [ps.sh]](ps.sh)
+Script [ps.sh](ps.sh)
 
 Example of usage:
 ```
@@ -23,13 +23,20 @@ $> ./ps.sh
       root     8     0     I  (rcu_sched)         
       root     9     0     I  (rcu_bh)            
       root    10     0     S  (migration/0)       
+
+```
+Trap example:
+```
+$> ./ps.sh | head
+Failed to acquire lockfile: /tmp/./ps.sh.lock.
+Held by 24248
 ```
 
 ### Script to see open files or process
 
 Some simple script for view open descriptors or which process open file
 
-Script [lsof.sh]](lsof.sh)
+Script [lsof.sh](lsof.sh)
 
 Example of usage:
 ```

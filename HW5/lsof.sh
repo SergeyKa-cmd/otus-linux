@@ -2,7 +2,16 @@
 
 # Simple open descriptors analyser
 
+# Variables 
+
+lockfile=/tmp/$0.lock
+
 # Functions
+
+clean_up() {
+	rm -f $lockfile
+	exit 255
+}
 
 usage(){
     echo "Usage: $0 [OPTION]... [NAME]..."
@@ -18,11 +27,10 @@ findFile(){
     typeset -i i=0
     #replace dot wit slash/dot for proper grep usage
     fileName=$(sed 's/\./\\\./g' <<< $fileName)
+    echo "filename - $fileName"
     while read -r pid ; do
-        if ls -l /proc/$pid/fd 2>/dev/null| awk '{print $11}' | egrep -v "socket|pipe" | grep "\/${fileName}$" &>/dev/null; then 
+        if ls -l /proc/$pid/fd 2>/dev/null| awk '{print $11}' | egrep -v "socket|pipe" | grep "${fileName}$" &>/dev/null; then 
             pids[$i]="$pid"
-            #echo "pid - ${pids[i]}"
-            #echo "i - $i"
             i+=1
         fi
         printf '\b%.1s' "$sp"
@@ -33,7 +41,6 @@ findFile(){
 }
 
 findProc(){
-    #echo "Should procc? $procSet $procName"
     if [ -d /proc/$procName/fd ] ; then
         echo "Open descriptors for process $procName :"
         ls -l /proc/$procName/fd | awk '{print $11}' | sort 
@@ -44,6 +51,17 @@ findProc(){
 
 # Main
 
+# set trap
+if ( set -o noclobber; echo "$$" > "$lockfile") 2> /dev/null;
+then
+    trap clean_up SIGHUP SIGINT SIGTERM
+else
+    echo "Failed to acquire lockfile: $lockfile."
+    echo "Held by $(cat $lockfile)"
+    exit 255
+fi
+
+# check args
 if [[ ! $# -eq 2  ]]; then
     usage
     exit 4
@@ -55,3 +73,4 @@ case $1 in
   *) usage; exit 1;;
 esac;
 
+clean_up
