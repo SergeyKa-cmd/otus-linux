@@ -126,14 +126,14 @@ sys     0m14,820s
 
 ### IO concurency
 
-Runing two vdbench test simultaneously on hard disk with nex config:
+Runing two vdbench test simultaneously on hard disk with next config:
 ```
 sd=sd1,lun=/dev/sda2,openflags=o_direct
 wd=bd,sd=sd*,seekpct=random,rdpct=80
 rd=runbd1,wd=bd,iorate=max,elapsed=60,interval=5,threads=2,forxfersize=(8k)
 ```
 
-#### Test 1
+#### Test1
 
 As we see best-effort gives a little bit more i/o and MB/sec.
 
