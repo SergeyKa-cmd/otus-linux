@@ -14,20 +14,24 @@ clean_up() {
 }
 
 usage(){
-    echo "Usage: $0 [OPTION]... [NAME]..."
+    echo "Usage: $0 [OPTION]... [FULL PATH FILENAME]..."
     echo " -f, --file           file name" 
     echo " -p, --process       process name"
+    echo "Use root (sudo) for full access."
 }
 
 findFile(){
+    if echo $fileName | grep -v  '^\/.*' > /dev/null; then
+            echo "Error: please use full path name."
+            echo
+            usage
+            clean_up
+    fi
     sp='/-\|'
     printf ' '
     echo -n "Processing:."
     procs=`ls /proc/  | egrep "^[0-9]"`
     typeset -i i=0
-    #replace dot wit slash/dot for proper grep usage
-    fileName=$(sed 's/\./\\\./g' <<< $fileName)
-    echo "filename - $fileName"
     while read -r pid ; do
         if ls -l /proc/$pid/fd 2>/dev/null| awk '{print $11}' | egrep -v "socket|pipe" | grep "${fileName}$" &>/dev/null; then 
             pids[$i]="$pid"
@@ -64,7 +68,7 @@ fi
 # check args
 if [[ ! $# -eq 2  ]]; then
     usage
-    exit 4
+    clean_up
 fi
 
 case $1 in
