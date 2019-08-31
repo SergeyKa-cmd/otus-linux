@@ -189,3 +189,7 @@ sdb                     8:16   0   8G  0 disk
 	linux16 /boot/vmlinuz-3.10.0-957.12.2.el7.x86_64 root=/dev/mapper/vg--root-lv--root ro no_timer_check console=tty0 console=ttyS0,115200n8 net.ifnames=0 biosdevname=0 elevator=noop crashkernel=auto 
 
 ```
+
+#### Usefull links
+
+https://github.com/thedolphin/dracut-root-lv-resize
