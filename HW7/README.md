@@ -26,7 +26,7 @@ Swich on autorelabel for se-linux if used
 
 Boot GRUB stage, press `e` for edit. Add `rw init=/sysroot/bin/sh`. Now you`ll have RW fs, no need to remount.
 
-Tips:
+#### Tips
 
 IF boot process hang with `failed to load selinux policy freezing` you can swich off se-linux in grub menu when edit `e` using option `selinux=0`
 
