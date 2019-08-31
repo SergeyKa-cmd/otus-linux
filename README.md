@@ -13,6 +13,8 @@
 
 * [HW-6 Packaging and soft distribution](HW6/README.md)
 
+* [HW-7 Boot system](HW7/README.md)
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)
