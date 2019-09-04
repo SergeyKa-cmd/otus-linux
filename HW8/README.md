@@ -210,15 +210,40 @@ Aug 31 14:45:41 otuslinux httpd[26379]: AH00558: httpd: Could not reliably deter
 Aug 31 14:45:41 otuslinux systemd[1]: Started The Apache HTTP Server. 
 ```
 
-#### Create systemd scripts for Jira
+### Create systemd scripts for Jira
 
 ```
 [root@otuslinux vagrant]#  wget https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-7.2.3-x64.bin
 [root@otuslinux vagrant]# chmod +x atlassian-jira-software-7.2.3-x64.bin
 [root@otuslinux vagrant]# ./atlassian-jira-software-7.2.3-x64.bin << EOF
 o 1 i y EOF
-[root@otuslinux vagrant]# touch /lib/systemd/system/jira.service
+[root@otuslinux vagrant]# cp /vagrant/jira.service /lib/systemd/system/jira.service
 [root@otuslinux vagrant]# chmod 664 /lib/systemd/system/jira.service
+[root@otuslinux vagrant]# systemctl daemon-reload
+[root@otuslinux vagrant]# systemctl enable jira.service
+Created symlink from /etc/systemd/system/multi-user.target.wants/jira.service to /usr/lib/systemd/system/jira.service.
+[root@otuslinux vagrant]# systemctl start jira.service
+[root@otuslinux vagrant]# systemctl status jira.service
+● jira.service - Atlassian Jira
+   Loaded: loaded (/usr/lib/systemd/system/jira.service; enabled; vendor preset: disabled)
+   Active: active (running) since Tue 2019-09-03 17:13:19 UTC; 6s ago
+  Process: 7764 ExecStart=/opt/atlassian/jira/bin/start-jira.sh (code=exited, status=0/SUCCESS)
+ Main PID: 7792 (java)
+   CGroup: /system.slice/jira.service
+           └─7792 /opt/atlassian/jira/jre//bin/java -Djava.util.logging.config.file=/opt/atlassian/jira/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager ...
+
+Sep 03 17:13:19 otuslinux start-jira.sh[7764]: .:,.$MMMMMMM
+Sep 03 17:13:19 otuslinux start-jira.sh[7764]: .IMMMM..NMMMMMD.
+Sep 03 17:13:19 otuslinux start-jira.sh[7764]: .8MMMMM:  :NMMMMN.
+Sep 03 17:13:19 otuslinux start-jira.sh[7764]: .MMMMMM.   .MMMMM~.
+Sep 03 17:13:19 otuslinux start-jira.sh[7764]: .MMMMMN    .MMMMM?.
+Sep 03 17:13:19 otuslinux start-jira.sh[7764]: Atlassian JIRA
+Sep 03 17:13:19 otuslinux start-jira.sh[7764]: Version : 7.2.3
+Sep 03 17:13:19 otuslinux start-jira.sh[7764]: If you encounter issues starting or stopping JIRA, please see the Troubleshooting guide at http://confluence.atlassian.com/display/JIRA...ooting+Guide
+Sep 03 17:13:19 otuslinux start-jira.sh[7764]: Server startup logs are located in /opt/atlassian/jira/logs/catalina.out
+Sep 03 17:13:19 otuslinux systemd[1]: Started Atlassian Jira.
+Hint: Some lines were ellipsized, use -l to show in full.
+
 ```
 
 
