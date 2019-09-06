@@ -15,6 +15,10 @@
 
 * [HW-7 Boot system](HW7/README.md)
 
+* [HW-8 Systemd and SysV](HW8/README.md)
+
+* [HW-9 Ansible](HW9/README.md)
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)

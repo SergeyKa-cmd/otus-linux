@@ -6,7 +6,7 @@ sudo bash -c './atlassian-jira-software-7.2.3-x64.bin << EOF
 o
 1
 i
-y
+n
 EOF'
 
 touch /lib/systemd/system/jira.service
