@@ -5,7 +5,7 @@
 
 ### Usage
 
-Clone this repo, run `vagrant up` and you`ll get virtualbox machine with nginz on 8080 port. Provisioning powered by ansible roles and vagrant. 
+Clone this repo, run `vagrant up` and you`ll get virtualbox machine with nginx on 8080 port. Provisioning powered by ansible roles and vagrant. 
 
 ```
 $> vagrant up
@@ -17,6 +17,13 @@ nginx                      : ok=6    changed=4    unreachable=0    failed=0    s
 
 ==> nginx: Running provisioner: shell...
     nginx: Running: inline script
+
+$> curl http://192.168.11.150:8080
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+    <head>
+        <title>Test Page for the Nginx HTTP Server on Fedora</title>
 ```
 
 ### Create palybook for nginx
