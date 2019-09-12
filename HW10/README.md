@@ -99,7 +99,7 @@ day ALL=(ALL) NOPASSWD: ALL
 
 Also you can use `/etc/sudoers.d/day` it`s more flexible.
 
-### HW task
+### HW tasks
 
 #### Restrict access on weekend for all except some group
 
@@ -113,6 +113,23 @@ account required pam_exec.so /usr/local/bin/group_test_login.sh
 
 [Script group_test_login.sh](group_test_login.sh)
 
+
+#### Add sudo for user
+
+Add to `/etc/sudoers` by using `visudo`
+```
+day ALL=(ALL) NOPASSWD: ALL
+```
+
+Check permitions
+```
+[day@nginx ~]$ sudo -l
+...
+
+User day may run the following commands on nginx:
+    (ALL) ALL
+    (ALL) NOPASSWD: ALL
+```
 
 ### Usefull links
 
