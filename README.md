@@ -21,6 +21,8 @@
 
 * [HW-10 Security (AAA)](HW10/README.md)
 
+* [HW-11 Performance monitpring](HW11/README.md)
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)
