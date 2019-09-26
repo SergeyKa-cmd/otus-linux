@@ -23,7 +23,7 @@
 
 * [HW-12 Performance monitpring](HW12/README.md)
 
-* [HW-13 Monitpring Alerting](HW13/README.md)
+* [HW-13 Monitoring & Alerting](HW13/README.md)
 
 # Инструкции
 
