@@ -21,7 +21,9 @@
 
 * [HW-10 Security (AAA)](HW10/README.md)
 
-* [HW-11 Performance monitpring](HW11/README.md)
+* [HW-12 Performance monitpring](HW12/README.md)
+
+* [HW-13 Monitpring Alerting](HW13/README.md)
 
 # Инструкции
 
