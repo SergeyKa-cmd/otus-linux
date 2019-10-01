@@ -25,6 +25,7 @@ $ sudo systemctl status bacula-director.service
 ```
 
 Edit `/etc/bacula/bacula-dir.conf` like [bacula-dir.conf](bacula-servert/bacula-dir.conf)
+
 Edit `/etc/bacula/bacula-sd.conf` like [bacula-sd.conf](bacula-server/bacula-sd.conf)
 
 ###### Centos7 (tried to run but have some problem, so better use ubuntu)
