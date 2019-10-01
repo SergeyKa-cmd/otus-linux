@@ -1,0 +1,106 @@
+root@gendalf:~# bconsole 
+Connecting to Director localhost:9101
+1000 OK: 1 gendalf-dir Version: 7.0.5 (28 July 2014)
+Enter a period to cancel a command.
+*list jobs
+Automatically selected Catalog: MyCatalog
+Using Catalog "MyCatalog"
++-------+-------------------+---------------------+------+-------+----------+----------+-----------+
+| JobId | Name              | StartTime           | Type | Level | JobFiles | JobBytes | JobStatus |
++-------+-------------------+---------------------+------+-------+----------+----------+-----------+
+| 1     | RemoteBackup      | 2019-09-29 18:30:00 | B    | F     | 0        | 0        | f         |
+| 2     | RemoteBackup      | 2019-09-29 18:30:02 | B    | F     | 0        | 0        | f         |
+| 3     | BilboRemoteBackup | 2019-09-29 18:33:17 | B    | F     | 0        | 0        | f         |
+| 4     | BilboRemoteBackup | 2019-09-29 18:35:12 | B    | F     | 0        | 0        | f         |
+| 5     | BilboRemoteBackup | 2019-09-29 18:40:02 | B    | F     | 0        | 0        | f         |
+| 6     | BilboRemoteBackup | 2019-09-29 18:50:02 | B    | F     | 0        | 0        | f         |
+| 7     | BilboRemoteBackup | 2019-09-29 19:00:00 | B    | F     | 0        | 0        | f         |
+| 8     | BilboRemoteBackup | 2019-09-29 19:00:02 | B    | F     | 0        | 0        | f         |
+| 9     | BilboRemoteBackup | 2019-09-29 19:10:02 | B    | F     | 0        | 0        | f         |
+| 10    | BilboRemoteBackup | 2019-09-29 19:20:02 | B    | F     | 0        | 0        | f         |
+| 11    | BilboRemoteBackup | 2019-09-29 20:20:02 | B    | F     | 0        | 0        | f         |
+| 12    | BilboRemoteBackup | 2019-09-29 20:30:00 | B    | F     | 0        | 0        | f         |
+| 13    | BilboRemoteBackup | 2019-09-29 20:30:02 | B    | F     | 0        | 0        | f         |
+| 14    | BilboRemoteBackup | 2019-09-29 20:40:02 | B    | F     | 0        | 0        | f         |
+| 15    | BilboRemoteBackup | 2019-09-29 20:50:02 | B    | F     | 0        | 0        | f         |
+| 16    | BilboRemoteBackup | 2019-09-29 21:00:00 | B    | F     | 0        | 0        | f         |
+| 17    | BilboRemoteBackup | 2019-09-29 21:00:02 | B    | F     | 0        | 0        | f         |
+| 18    | BilboRemoteBackup | 2019-09-30 04:50:02 | B    | F     | 0        | 0        | f         |
+| 19    | BilboRemoteBackup | 2019-09-30 05:00:00 | B    | F     | 0        | 0        | f         |
+| 20    | BilboRemoteBackup | 2019-09-30 05:00:02 | B    | F     | 0        | 0        | f         |
+| 21    | BilboRemoteBackup | 2019-09-30 05:06:02 | B    | F     | 0        | 0        | f         |
+| 22    | BilboRemoteBackup | 2019-09-30 05:10:00 | B    | F     | 0        | 0        | f         |
+| 27    | BilboRemoteBackup | 2019-09-30 05:20:00 | B    | I     | 0        | 0        | f         |
+| 28    | BilboRemoteBackup | 2019-09-30 05:30:00 | B    | I     | 0        | 0        | f         |
+| 29    | BilboRemoteBackup | 2019-09-30 05:30:00 | B    | D     | 0        | 0        | f         |
+| 23    | BilboRemoteBackup | 2019-09-30 05:40:00 | B    | F     | 0        | 0        | f         |
+| 30    | BilboRemoteBackup | 2019-09-30 05:40:00 | B    | F     | 0        | 0        | f         |
+| 31    | BilboRemoteBackup | 2019-09-30 08:50:00 | B    | F     | 0        | 0        | f         |
+| 24    | BilboRemoteBackup | 2019-09-30 08:50:59 | B    | F     | 0        | 0        | f         |
+| 32    | BilboRemoteBackup | 2019-09-30 09:30:00 | B    | F     | 0        | 0        | f         |
+| 33    | BilboRemoteBackup | 2019-09-30 09:30:01 | B    | F     | 0        | 0        | f         |
+| 34    | BilboRemoteBackup | 2019-09-30 09:40:00 | B    | F     | 0        | 0        | f         |
+| 35    | BilboRemoteBackup | 2019-09-30 09:50:00 | B    | F     | 0        | 0        | f         |
+| 25    | BilboRemoteBackup | 2019-09-30 09:52:51 | B    | F     | 0        | 0        | f         |
+| 36    | BilboRemoteBackup | 2019-09-30 09:56:21 | B    | F     | 0        | 0        | f         |
+| 37    | BilboRemoteBackup | 2019-09-30 09:57:47 | B    | F     | 0        | 0        | f         |
+| 38    | BilboRemoteBackup | 2019-09-30 09:59:51 | B    | F     | 0        | 0        | f         |
+| 40    | BilboRemoteBackup | 2019-09-30 10:00:00 | B    | D     | 0        | 0        | f         |
+| 41    | BilboRemoteBackup | 2019-09-30 10:04:26 | B    | I     | 0        | 0        | f         |
+| 26    | BilboRemoteBackup | 2019-09-30 10:06:40 | B    | F     | 0        | 0        | f         |
+| 39    | BilboRemoteBackup | 2019-09-30 10:06:40 | B    | F     | 0        | 0        | f         |
+| 42    | BilboRemoteBackup | 2019-09-30 10:10:00 | B    | I     | 0        | 0        | f         |
+| 43    | BilboRemoteBackup | 2019-09-30 10:15:27 | B    | F     | 0        | 0        | f         |
+| 47    | BilboRemoteBackup | 2019-09-30 10:40:00 | B    | I     | 0        | 0        | f         |
+| 44    | BilboRemoteBackup | 2019-09-30 10:45:29 | B    | F     | 0        | 0        | f         |
+| 48    | BilboRemoteBackup | 2019-09-30 10:50:00 | B    | I     | 0        | 0        | f         |
+| 49    | BilboRemoteBackup | 2019-09-30 11:00:00 | B    | I     | 0        | 0        | f         |
+| 50    | BilboRemoteBackup | 2019-09-30 11:00:00 | B    | D     | 0        | 0        | f         |
+| 51    | BilboRemoteBackup | 2019-09-30 11:10:00 | B    | I     | 0        | 0        | f         |
+| 45    | BilboRemoteBackup | 2019-09-30 11:15:29 | B    | F     | 0        | 0        | f         |
+| 52    | BilboRemoteBackup | 2019-09-30 11:20:00 | B    | I     | 0        | 0        | f         |
+| 53    | BilboRemoteBackup | 2019-09-30 11:30:00 | B    | I     | 0        | 0        | f         |
+| 54    | BilboRemoteBackup | 2019-09-30 11:30:00 | B    | D     | 0        | 0        | f         |
+| 55    | BilboRemoteBackup | 2019-09-30 11:40:00 | B    | I     | 0        | 0        | f         |
+| 46    | BilboRemoteBackup | 2019-09-30 11:45:30 | B    | F     | 0        | 0        | f         |
+| 56    | BilboRemoteBackup | 2019-09-30 11:50:00 | B    | I     | 0        | 0        | f         |
+| 57    | BilboRemoteBackup | 2019-09-30 12:00:00 | B    | I     | 0        | 0        | f         |
+| 58    | BilboRemoteBackup | 2019-09-30 12:00:00 | B    | D     | 0        | 0        | f         |
+| 59    | BilboRemoteBackup | 2019-09-30 12:00:23 | B    | I     | 0        | 0        | f         |
+| 60    | BilboRemoteBackup | 2019-09-30 12:01:09 | B    | I     | 0        | 0        | f         |
+| 61    | BilboRemoteBackup | 2019-09-30 12:04:04 | B    | F     | 1746     | 745075   | T         |
+| 62    | BilboRemoteBackup | 2019-09-30 12:10:02 | B    | I     | 0        | 0        | T         |
+| 63    | BilboRemoteBackup | 2019-09-30 12:20:02 | B    | I     | 2        | 37       | T         |
+| 64    | BilboRemoteBackup | 2019-09-30 12:30:00 | B    | I     | 0        | 0        | T         |
+| 65    | BilboRemoteBackup | 2019-09-30 12:30:12 | B    | D     | 2        | 37       | T         |
+| 66    | BilboRemoteBackup | 2019-09-30 12:40:02 | B    | I     | 0        | 0        | T         |
+| 67    | BilboRemoteBackup | 2019-09-30 12:50:02 | B    | I     | 0        | 0        | T         |
+| 68    | BilboRemoteBackup | 2019-09-30 13:00:00 | B    | I     | 0        | 0        | T         |
+| 69    | BilboRemoteBackup | 2019-09-30 13:00:12 | B    | D     | 2        | 37       | T         |
+| 70    | BilboRemoteBackup | 2019-09-30 13:10:02 | B    | I     | 0        | 0        | T         |
+| 71    | BilboRemoteBackup | 2019-09-30 13:20:02 | B    | I     | 0        | 0        | T         |
+| 72    | BilboRemoteBackup | 2019-09-30 13:30:01 | B    | I     | 0        | 0        | T         |
+| 73    | BilboRemoteBackup | 2019-09-30 13:30:12 | B    | D     | 2        | 37       | T         |
+| 74    | BilboRemoteBackup | 2019-09-30 13:40:03 | B    | I     | 0        | 0        | T         |
+| 75    | BilboRemoteBackup | 2019-09-30 13:50:03 | B    | I     | 0        | 0        | T         |
+| 76    | BilboRemoteBackup | 2019-09-30 14:00:01 | B    | I     | 0        | 0        | T         |
+| 77    | BilboRemoteBackup | 2019-09-30 14:00:13 | B    | D     | 2        | 37       | T         |
+| 78    | BilboRemoteBackup | 2019-09-30 14:10:03 | B    | I     | 0        | 0        | T         |
+| 79    | BilboRemoteBackup | 2019-09-30 17:00:00 | B    | I     | 0        | 0        | T         |
+| 80    | BilboRemoteBackup | 2019-09-30 17:00:12 | B    | D     | 2        | 37       | T         |
+| 81    | BilboRemoteBackup | 2019-09-30 17:10:02 | B    | I     | 0        | 0        | T         |
+| 82    | RestoreRemote     | 2019-09-30 17:10:43 | R    | F     | 1746     | 2190846  | T         |
+| 83    | RestoreRemote     | 2019-09-30 17:14:30 | R    | F     | 2        | 29       | T         |
+| 84    | RestoreRemote     | 2019-09-30 17:18:50 | R    | F     | 1746     | 2190846  | T         |
+| 85    | BilboRemoteBackup | 2019-09-30 17:20:02 | B    | I     | 1        | 0        | T         |
+| 86    | BilboRemoteBackup | 2019-09-30 18:10:19 | B    | I     | 0        | 0        | T         |
+| 87    | BilboRemoteBackup | 2019-09-30 18:20:02 | B    | I     | 0        | 0        | T         |
+| 88    | BilboRemoteBackup | 2019-09-30 18:30:00 | B    | I     | 0        | 0        | T         |
+| 89    | BilboRemoteBackup | 2019-09-30 18:30:12 | B    | D     | 1        | 0        | T         |
+| 90    | BilboRemoteBackup | 2019-09-30 18:40:02 | B    | I     | 0        | 0        | T         |
+| 91    | BilboRemoteBackup | 2019-09-30 18:50:03 | B    | I     | 0        | 0        | T         |
+| 92    | BilboRemoteBackup | 2019-09-30 18:50:15 | B    | I     | 0        | 0        | T         |
+| 93    | RestoreRemote     | 2019-09-30 18:51:29 | R    | F     | 2        | 29       | T         |
++-------+-------------------+---------------------+------+-------+----------+----------+-----------+
+*
+

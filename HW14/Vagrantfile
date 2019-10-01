@@ -1,0 +1,40 @@
+Vagrant.configure(2) do |config|
+
+  config.vm.define "gendalf" do |subconfigs|
+    subconfigs.vm.box = "ubuntu/xenial64"
+    subconfigs.vm.hostname="gendalf"
+    subconfigs.vm.network :private_network, ip: "192.168.50.10"
+    subconfigs.vm.provider "virtualbox" do |vb|
+      vb.memory = "2048"
+      vb.cpus = "2"
+    end
+    subconfigs.vm.provision "shell", inline: <<-SHELL
+    apt update
+    apt install -y bacula-director-mysql mariadb-server net-tools
+    systemctl start mariadb
+    SHELL
+  end
+
+  config.vm.define "bilbo" do |subconfigc|
+    subconfigc.vm.box = "ubuntu/xenial64"
+    subconfigc.vm.hostname="bilbo"
+    subconfigc.vm.network :private_network, ip: "192.168.50.20"
+    subconfigc.vm.provider "virtualbox" do |vb|
+      vb.memory = "2048"
+      vb.cpus = "2"
+    end
+    subconfigc.vm.provision "shell", inline: <<-SHELL
+    apt-get update
+    apt install -y bacula-client
+    SHELL
+  end
+
+  config.ssh.insert_key = false 
+  config.ssh.private_key_path = ['~/.vagrant.d/insecure_private_key', '~/.ssh/id_rsa']
+  config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/authorized_keys"  
+
+#  config.vm.provision "ansible" do |ansible|
+#    ansible.playbook = "provision.yml"
+#  end
+
+end
