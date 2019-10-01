@@ -532,6 +532,6 @@ Terminated Jobs:
 
 ### Useful links
 
-https://webmodelling.com/webbits/miscellaneous/bacula.aspx
+https://www.bacula.org/documentation/documentation/
 
 https://webmodelling.com/webbits/miscellaneous/bacula.aspx
