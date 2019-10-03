@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  nginx: 
+    image: nginx:alpine 
+    ports:
+      - "8080:80"
+      - "443:443"
+    volumes:
+      - "./hosts:/etc/nginx/conf.d"
+      - "./www:/var/www"
+      - "./logs:/var/log/nginx"
+    networks:
+      web_net:
+    links:
+      - php
+  php:
+    image: php:fpm
+    ports:
+      - "9000:9000"
+    volumes:
+      - "./www:/var/www"
+    networks:
+      web_net:
+networks:
+  web_net:
