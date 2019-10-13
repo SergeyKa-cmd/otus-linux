@@ -5,7 +5,7 @@
 
 ### Important notice
 
-This ansible playbooks inspired(clone) by https://github.com/sadsfae/ansible-elk 
+This ansible playbooks inspired(modified clone) by https://github.com/sadsfae/ansible-elk 
 
 For more info about roles read [README](ans-elk/README.md)
 
