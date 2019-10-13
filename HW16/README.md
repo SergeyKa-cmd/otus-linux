@@ -13,7 +13,7 @@ In this repo we use ELK 7.4.0
 
 ### How to use this repo
 
-Clone repo, cd `ans-elk`, run `vagrant up`. Vagrant will build two machines elk and elkclient. Be patient it can take long time. Make coffee and relax ;)
+Clone repo, `cd ansible-elk`, run `vagrant up`. Vagrant will build two machines elk and elkclient. Be patient it can take long time. Make coffee and relax ;)
 
 For manual install run:
 ```
