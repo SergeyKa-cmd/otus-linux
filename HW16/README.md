@@ -7,7 +7,7 @@
 
 This ansible playbooks inspired(modified clone) by https://github.com/sadsfae/ansible-elk 
 
-For more info about roles read [README](ans-elk/readme.md)
+For more info about roles read [README](ansible-elk/readme.md)
 
 In this repo we use ELK 7.4.0
 
@@ -23,7 +23,7 @@ $> ansible-playbook ./install/elk_client.yml
 
 Go to Kibana Dashboard http://192.168.50.31/app/kibana#/discover? (admin/admin)
 
-![ELK](ans-elk/image/kibana.png?raw=true "You will see page like this")
+![ELK](ansible-elk/image/kibana.png?raw=true "You will see page like this")
 
 ### Troubleshooting
 
