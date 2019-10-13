@@ -29,6 +29,8 @@
 
 * [HW-15 Docker](HW15/README.md)
 
+* [HW-16 Logging (ELK)](HW16/README.md)
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)

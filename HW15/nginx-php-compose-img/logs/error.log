@@ -2,3 +2,10 @@
 2019/10/02 17:04:55 [emerg] 1#1: host not found in upstream "php" in /etc/nginx/conf.d/test.conf:11
 2019/10/02 17:22:17 [error] 6#6: *1 FastCGI sent in stderr: "Primary script unknown" while reading response header from upstream, client: 192.168.64.1, server: test, request: "GET / HTTP/1.1", upstream: "fastcgi://192.168.64.2:9000", host: "localhost:8080"
 2019/10/02 17:22:18 [error] 6#6: *1 FastCGI sent in stderr: "Primary script unknown" while reading response header from upstream, client: 192.168.64.1, server: test, request: "GET / HTTP/1.1", upstream: "fastcgi://192.168.64.2:9000", host: "localhost:8080"
+2019/10/04 19:10:25 [error] 6#6: *53 open() "/var/www/test/actuator/prometheus" failed (2: No such file or directory), client: 192.168.128.1, server: test, request: "GET /actuator/prometheus HTTP/1.1", host: "localhost:8080"
+2019/10/04 19:10:25 [error] 6#6: *54 open() "/var/www/test/actuator/prometheus" failed (2: No such file or directory), client: 192.168.128.1, server: test, request: "GET /actuator/prometheus HTTP/1.1", host: "127.0.0.1:8080"
+2019/10/04 19:10:25 [error] 6#6: *55 open() "/var/www/test/metrics" failed (2: No such file or directory), client: 192.168.128.1, server: test, request: "GET /metrics HTTP/1.1", host: "localhost:8080"
+2019/10/04 19:10:25 [error] 6#6: *56 open() "/var/www/test/metrics" failed (2: No such file or directory), client: 192.168.128.1, server: test, request: "GET /metrics HTTP/1.1", host: "127.0.0.1:8080"
+2019/10/04 19:10:25 [error] 6#6: *61 open() "/var/www/test/manager/status" failed (2: No such file or directory), client: 192.168.128.1, server: test, request: "GET /manager/status?XML=true HTTP/1.1", host: "localhost:8080"
+2019/10/04 19:10:25 [error] 6#6: *62 open() "/var/www/test/manager/status" failed (2: No such file or directory), client: 192.168.128.1, server: test, request: "GET /manager/status?XML=true HTTP/1.1", host: "127.0.0.1:8080"
+2019/10/04 19:10:25 [error] 6#6: *63 open() "/var/www/test/health" failed (2: No such file or directory), client: 192.168.128.1, server: test, request: "GET /health HTTP/1.1", host: "localhost:8080"
