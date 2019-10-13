@@ -1,0 +1,9 @@
+---
+# tasks file for log
+- include: common.yml
+- include: elastic.yml
+- include: kibana.yml
+- include: logstash.yml
+#- include: prom.yml
+#- include: grafana.yml
+#- include: blackbox.yml
