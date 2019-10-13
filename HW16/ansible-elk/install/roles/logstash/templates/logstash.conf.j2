@@ -1,0 +1,42 @@
+
+input {
+  beats {
+    port => {{logstash_syslog_port}}
+    tags => ["filebeat"]
+#    ssl => true
+#    ssl_certificate => ["/usr/share/logstash/beat-forwarder.crt"]
+#    ssl_key => ["/usr/share/logstash/beat-forwarder.key"]
+    ssl_verify_mode => none
+  }
+}
+
+filter {
+  if [type] == "syslog" {
+    grok {
+      match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }
+      add_field => [ "received_at", "%{@timestamp}" ]
+      add_field => [ "received_from", "%{host}" ]
+    }
+    date {
+      match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
+    }
+  }
+}
+
+filter {
+  if [type] == "nginx" {
+    grok {
+      match => { "message" => "%{COMBINEDAPACHELOG}" }
+    }
+  }
+}
+
+output {
+if "filebeat" in [tags] {
+  elasticsearch {
+    hosts => "localhost:{{es_local_port}}"
+    index => "filebeat-%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+    document_type => "%{[@metadata][type]}"
+  }
+}
+}

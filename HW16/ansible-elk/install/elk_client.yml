@@ -1,0 +1,15 @@
+---
+#
+# Playbook to install the ELK client utilities
+#
+
+- hosts: elkclient
+  remote_user: vagrant
+  vars_files:
+    - group_vars/all.yml
+  roles:
+    - { role: filebeat }
+    - { role: metricbeat, when: (install_metricbeat)}
+    - { role: packetbeat, when: (install_packetbeat)}
+    - { role: heartbeat, when: (install_heartbeat)}
+    - { role: nginx }

@@ -7,7 +7,7 @@
 
 This ansible playbooks inspired(modified clone) by https://github.com/sadsfae/ansible-elk 
 
-For more info about roles read [README](ans-elk/README.md)
+For more info about roles read [README](ans-elk/readme.md)
 
 In this repo we use ELK 7.4.0
 
