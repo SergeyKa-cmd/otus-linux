@@ -5,7 +5,7 @@
 
 ### How to use this repo
 
-Clone repo, cd run vagrant up. Vagrant will build seven machines. Be patient it can take long time. 
+Clone repo,  run `vagrant up`. Vagrant will build seven machines. Be patient it can take long time. 
 
 ```
 $> vagrant status
@@ -23,7 +23,7 @@ office2Server             running (virtualbox)
 
 ### Important notice
 
-Check that Default router IS NOT 10.0.2.* dev eth0. If this happend run `systemctl restart network` and get like this:
+Check that Default router pressent and IS NOT `10.0.2.* dev eth0`. If this happend run `systemctl restart network` and get like this:
 ```
 [root@office1Server vagrant]# ip route 
 default via 192.168.2.193 dev eth1 proto static metric 103 
@@ -133,6 +133,8 @@ COMMIT
 https://www.calculator.net/ip-subnet-calculator.html
 
 https://subnet-calculator.samuraj-cz.com
+
+https://hackertarget.com/tcpdump-examples/
 
 ---
 
