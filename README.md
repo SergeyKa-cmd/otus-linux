@@ -31,6 +31,10 @@
 
 * [HW-16 Logging (ELK)](HW16/README.md)
 
+* [HW-17 Containers (cgroups & namespaces)](HW17/README.md)
+
+* [HW-18 Networking](HW18/README.md)
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)
