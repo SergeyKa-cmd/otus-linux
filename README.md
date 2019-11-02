@@ -35,6 +35,10 @@
 
 * [HW-18 Networking](HW18/README.md)
 
+* [HW-19 LDAP](HW19/README.md)
+
+* [HW-20 Net Fiters](HW20/README.md)
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)
