@@ -1,0 +1,17 @@
+[ipaserver]
+ipaserver.test.local ansible_host=192.168.50.41 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/ipaserver/virtualbox/private_key
+
+[ipaserver:vars]
+ipaadmin_password=ADMPassword1
+ipadm_password=DMPassword1
+ipaserver_domain=test.local
+ipaserver_realm=TEST.LOCAL
+
+[ipaclient]
+ipaclient.test.local ansible_host=192.168.50.42 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/ipaserver/virtualbox/private_key
+
+[ipaclient:vars]
+ipaadmin_password=ADMPassword1
+ipaserver_domain=test.local
+ipaserver_realm=TEST.LOCAL
+ipaclient_servers=ipaserver.test.local

@@ -1,0 +1,26 @@
+---
+- name: Install FreeIPA Server
+  hosts: ipaserver
+  become: yes
+
+  tasks:
+  - name: Set server and generate certs
+    block:
+    - name: Set hostname
+      hostname:
+         name: ipaclient.test.local
+    - name: Config hosts
+      lineinfile:
+         dest: /etc/hosts
+         line: '{{ item }}'
+      with_items:
+            - '192.168.50.41 ipaclient.test.local ipaclient'
+            - '192.168.50.42 ipaserver.test.local ipaserver'
+  pre_tasks:
+   - file: path=/etc/hosts state=absent
+   - file: path=/etc/hosts state=touch
+   - yum: name=firewalld state=present
+   - systemd: name=firewalld state=started enabled=yes
+
+  roles:
+    - ipaserver

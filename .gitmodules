@@ -1,0 +1,3 @@
+[submodule "HW19/HW19/ansible-freeipa"]
+	path = HW19/HW19/ansible-freeipa
+	url = https://github.com/freeipa/ansible-freeipa.git
