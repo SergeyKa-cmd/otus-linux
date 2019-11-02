@@ -6,7 +6,9 @@
 ### How to use this repo
 
 Vagrant uses ansible roles for deploy FreeIpa. Clone repo, run `cd HW19`.
+
 Clone ansible freeipa `git clone https://github.com/freeipa/ansible-freeipa.git`
+
 Run `vagrant up`. You will get two machines, ipaserver and ipaclient.
 
 ![FreeIPA](./ipa_ldap.jpg?raw=true "Free IPA web page example")
