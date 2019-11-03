@@ -2,31 +2,30 @@
 - name: Install FreeIPA Server
   hosts: ipaclient
   become: yes
-  
+   
+  tasks:
+  - name: Set server and generate certs
+    block:
+    - name: Set hostname
+      hostname:
+         name: ipaclient.test.local
+    - name: Config hosts
+      lineinfile:
+         dest: /etc/hosts
+         line: '{{ item }}'
+      with_items:
+            - '192.168.50.42 ipaclient.test.local ipaclient'
+            - '192.168.50.41 ipaserver.test.local ipaserver'
+#    - name: Install epel-release
+#      yum:
+#        name: 
+#        - epel-release 
+#    - name: Install freeipa-client
+#      yum:
+#        name: 
+#        - freeipa-client
+#        state: latest
+#    - name: set ipa-client
+#      shell: ipa-client-install --domain=test.local --server=ipaserver.test.local --realm=TEST.LOCAL --principal=admin --password=ADMPassword1 --hostname=ipaclient.test.local --no-ntp  --unattended
   roles:
   - ipaclient
-  
-  #tasks:
-  #- name: Set server and generate certs
-  #  block:
-  #  - name: Set hostname
-  #    hostname:
-  #       name: ipaclient.test.local
-  #  - name: Config hosts
-  #    lineinfile:
-  #       dest: /etc/hosts
-  #       line: '{{ item }}'
-  #    with_items:
-  #          - '192.168.50.41 ipaclient.test.local ipaclient'
-  #          - '192.168.50.42 ipaserver.test.local ipaserver'
-  #  - name: Install epel-release
-  #    yum:
-  #      name: 
-  #      - epel-release 
-  #  - name: Install freeipa-client
-  #    yum:
-  #      name: 
-  #      - freeipa-client
-  #      state: latest
-  #  - name: set ipa-client
-  #    shell: ipa-client-install --domain=test.local --server=ipaserver.test.local --realm=TEST.LOCAL --principal=admin --password=ADMPassword1 --hostname=ipaclient.test.local --no-ntp  --unattended
