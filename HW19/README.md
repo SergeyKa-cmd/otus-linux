@@ -15,6 +15,8 @@ Run `vagrant up`. You will get two machines, ipaserver and ipaclient.
 
 ### Client install
 
+In case if vagrant provision of client has error, you need few minutes to wait while ipa server will be ready. Run agsain `vagrant provision ipaclient`
+
 #### Manual run (example)
 
 ```
