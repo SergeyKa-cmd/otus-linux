@@ -32,6 +32,7 @@ Vagrant.configure(2) do |config|
         vb.cpus = "2"
       end
       config.vm.provision "shell", inline: <<-SHELL
+      echo "Be patient waiting 60 sec while ipa server goes up." 
        sleep 60
 #      echo "192.168.50.41 ipaserver.test.local ipaserver" >> /etc/hosts
         SHELL

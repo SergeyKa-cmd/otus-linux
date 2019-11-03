@@ -5,17 +5,17 @@
 
 ### How to use this repo
 
-Vagrant uses ansible roles for deploy FreeIpa. Clone repo, run `cd HW19`.
+Vagrant uses ansible roles for deploy FreeIpa. Clone repo, run `cd ./otus-linux/HW19`.
 
 Clone ansible freeipa `git clone https://github.com/freeipa/ansible-freeipa.git`
 
 Run `vagrant up`. You will get two machines, ipaserver and ipaclient.
 
+In case if vagrant provision of client has error, you need to wait few minutes while ipa server will be ready. Than run  `vagrant provision ipaclient`
+
 ![FreeIPA](./ipa_ldap.jpg?raw=true "Free IPA web page example")
 
 ### Client install
-
-In case if vagrant provision of client has error, you need few minutes to wait while ipa server will be ready. Run agsain `vagrant provision ipaclient`
 
 #### Manual run (example)
 
