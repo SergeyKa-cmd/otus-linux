@@ -7,7 +7,72 @@
 
 ### How to use this repo
 
-Clone repo, `cd ansible-elk`, run `vagrant up`. 
+Clone repo, run `vagrant up`. 
+
+#### Port knocking
+
+All rules in inetrouter.rules.
+
+```
+[vagrant@centralRouter ~]$ telnet 192.168.255.1 22
+Trying 192.168.255.1...
+^C
+[vagrant@centralRouter ~]$ sudo ./knock.sh 192.168.255.1 8881 7777 9991 
+
+Starting Nmap 6.40 ( http://nmap.org ) at 2019-11-06 15:51 UTC
+Warning: 192.168.255.1 giving up on port because retransmission cap hit (0).
+Nmap scan report for 192.168.255.1
+Host is up (0.00028s latency).
+PORT     STATE    SERVICE
+8881/tcp filtered unknown
+MAC Address: 08:00:27:78:75:9D (Cadmus Computer Systems)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.17 seconds
+
+Starting Nmap 6.40 ( http://nmap.org ) at 2019-11-06 15:51 UTC
+Warning: 192.168.255.1 giving up on port because retransmission cap hit (0).
+Nmap scan report for 192.168.255.1
+Host is up (0.00032s latency).
+PORT     STATE    SERVICE
+7777/tcp filtered cbt
+MAC Address: 08:00:27:78:75:9D (Cadmus Computer Systems)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.16 seconds
+
+Starting Nmap 6.40 ( http://nmap.org ) at 2019-11-06 15:51 UTC
+Warning: 192.168.255.1 giving up on port because retransmission cap hit (0).
+Nmap scan report for 192.168.255.1
+Host is up (0.00025s latency).
+PORT     STATE    SERVICE
+9991/tcp filtered issa
+MAC Address: 08:00:27:78:75:9D (Cadmus Computer Systems)
+
+Nmap done: 1 IP address (1 host up) scanned in 0.16 seconds
+
+[vagrant@centralRouter ~]$  ssh vagrant@192.168.255.1
+vagrant@192.168.255.1's password: 
+Last login: Wed Nov  6 15:49:45 2019 from 192.168.255.2
+[vagrant@inetRouter ~]$ 
+
+```
+
+#### Test nginx on centralServer
+
+```
+[root@centralServer vagrant]# systemctl status nginx
+● nginx.service - The nginx HTTP and reverse proxy server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; vendor preset: disabled)
+   Active: active (running) since Wed 2019-11-06 16:26:36 UTC; 5min ago
+...
+
+[root@centralServer vagrant]# curl 192.168.0.2:80
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Welcome to CentOS</title>
+  <style rel="stylesheet" type="text/css"> 
+...
+```
 
 
 ### Troubleshooting
