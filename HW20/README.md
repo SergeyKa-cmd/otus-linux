@@ -3,11 +3,11 @@
 
 ## Net Filters
 
-### Important notice
-
 ### How to use this repo
 
 Clone repo, run `vagrant up`. 
+
+![Net](./hw-ip-traf.jpg?raw=true "Principal scheme")
 
 #### Port knocking
 
@@ -17,7 +17,7 @@ All rules in inetrouter.rules.
 [vagrant@centralRouter ~]$ telnet 192.168.255.1 22
 Trying 192.168.255.1...
 ^C
-[vagrant@centralRouter ~]$ sudo ./knock.sh 192.168.255.1 8881 7777 9991 
+[vagrant@centralRouter ~]$ sudo ./knock.sh 192.168.255.1 8881 7777 9991
 
 Starting Nmap 6.40 ( http://nmap.org ) at 2019-11-06 15:51 UTC
 Warning: 192.168.255.1 giving up on port because retransmission cap hit (0).
@@ -50,9 +50,9 @@ MAC Address: 08:00:27:78:75:9D (Cadmus Computer Systems)
 Nmap done: 1 IP address (1 host up) scanned in 0.16 seconds
 
 [vagrant@centralRouter ~]$  ssh vagrant@192.168.255.1
-vagrant@192.168.255.1's password: 
+vagrant@192.168.255.1's password:
 Last login: Wed Nov  6 15:49:45 2019 from 192.168.255.2
-[vagrant@inetRouter ~]$ 
+[vagrant@inetRouter ~]$
 
 ```
 
@@ -70,12 +70,65 @@ Last login: Wed Nov  6 15:49:45 2019 from 192.168.255.2
 <html>
 <head>
   <title>Welcome to CentOS</title>
-  <style rel="stylesheet" type="text/css"> 
+  <style rel="stylesheet" type="text/css">
 ...
 ```
 
+#### Firewalld port forwarding
 
-### Troubleshooting
+```
+[root@inetRouter2 vagrant]# firewall-cmd --list-all
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: eth2 eth0
+  sources:
+  services: ssh dhcpv6-client
+  ports:
+  protocols:
+  masquerade: no
+  forward-ports: port=8080:proto=tcp:toport=80:toaddr=192.168.0.2
+  source-ports:
+  icmp-blocks:
+  rich rules:
+
+[root@inetRouter2 vagrant]# firewall-cmd --list-all --zone=internal
+internal (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: eth1
+  sources:
+  services: ssh mdns samba-client dhcpv6-client
+  ports:
+  protocols:
+  masquerade: yes
+  forward-ports:
+  source-ports:
+  icmp-blocks:
+  rich rules:
+```
+
+![Port forwarding](./hw-ip-traf.jpg?raw=true "Nginx web page")
+
+#### Default router to internet
+
+```
+[vagrant@centralServer ~]$ tracepath -n yandex.ru
+ 1?: [LOCALHOST]                                         pmtu 1500
+ 1:  192.168.0.1                                           1.131ms 
+ 1:  192.168.0.1                                           0.961ms 
+ 2:  192.168.255.1                                         1.934ms 
+ 3:  no reply
+ 4:  no reply
+ 5:  no reply
+ 6:  10.109.11.6                                          11.079ms asymm 64 
+ 7:  212.188.1.5                                           9.476ms asymm 63 
+ 8:  195.34.50.73                                         10.986ms asymm 62 
+ 9:  212.188.55.2                                         10.072ms asymm 61 
+10:  212.188.2.230                                        11.505ms asymm 60 
+11:  no reply
+
+```
 
 ### Useful links
 
