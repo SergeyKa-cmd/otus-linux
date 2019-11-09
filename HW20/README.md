@@ -108,7 +108,7 @@ internal (active)
   rich rules:
 ```
 
-![Port forwarding](./hw-ip-traf.jpg?raw=true "Nginx web page")
+![Port forwarding](./port-forward.jpg?raw=true "Nginx web page")
 
 #### Default router to internet
 
