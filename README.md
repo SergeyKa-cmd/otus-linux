@@ -39,6 +39,9 @@
 
 * [HW-20 Net Fiters](HW20/README.md)
 
+* [HW-21 Static & Dynamic Routing (OSPF)](HW21/README.md)
+
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)
