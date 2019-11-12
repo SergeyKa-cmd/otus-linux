@@ -1,0 +1,45 @@
+---
+- name: Ssymmetric routing
+  hosts: routers
+  become: yes
+  tasks:
+   - name: copy ospfd.conf with "cost 1000" on router1
+     block:
+       - name: Your copy task
+         copy: src={{ item.src }} dest={{ item.dest }}
+         with_items:
+              - { src: 'ospfd_router1_cost.conf', dest: '/etc/quagga/ospfd.conf' }
+         
+       - name: change file ownership ospfd.conf
+         file:
+            path: /etc/quagga/ospfd.conf
+            owner: quagga
+            group: quagga
+      
+       - name: Restart service ospfd
+         service:
+            name: ospfd
+            state: restarted
+
+     when: ansible_hostname == "router1"
+
+
+   - name: copy ospfd.conf with "cost 1000" on router3
+     block:
+       - name: Your copy task
+         copy: src={{ item.src }} dest={{ item.dest }}
+         with_items:
+              - { src: 'ospfd_router3_cost.conf', dest: '/etc/quagga/ospfd.conf' }
+         
+       - name: change file ownership ospfd.conf
+         file:
+            path: /etc/quagga/ospfd.conf
+            owner: quagga
+            group: quagga
+      
+       - name: Restart service ospfd
+         service:
+            name: ospfd
+            state: restarted
+
+     when: ansible_hostname == "router3"
