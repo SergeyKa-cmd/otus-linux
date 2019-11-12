@@ -7,9 +7,9 @@
 
 Clone repo, run `vagrant up`. 
 
-![Net](./hw-ip-traf.jpg?raw=true "Principal scheme")
+![Net](./ospf.jpg?raw=true "Principal scheme")
 
-### Stand config
+### Stend config
 
 #### Check config of routers
 

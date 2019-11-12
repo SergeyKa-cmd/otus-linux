@@ -5,7 +5,7 @@
 
 ### How to use this repo
 
-Clone repo, run `vagrant up`. 
+Clone repo, run `vagrant up`.
 
 ![Net](./hw-ip-traf.jpg?raw=true "Principal scheme")
 
