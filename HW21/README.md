@@ -104,8 +104,9 @@ Link ID         ADV Router      Age  Seq#       CkSum  Route
 192.168.10.0    10.10.10.1       339 0x8000002f 0x5c36 192.168.10.0/24
 192.168.20.0    10.10.10.1      1359 0x8000002e 0x542b 192.168.20.0/24
 192.168.30.0    10.10.10.1       909 0x8000002f 0x7ffe 192.168.30.0/24
+```
 
-
+```
 router1# show ip ospf neighbor
 
     Neighbor ID Pri State           Dead Time Address         Interface            RXmtL RqstL DBsmL
@@ -117,7 +118,9 @@ R    10.20.20.1            [10] area: 0.0.0.0, ABR
                            via 192.168.10.2, vlan10
 R    10.30.30.1            [10] area: 0.0.0.0, ABR
                            via 192.168.30.1, vlan30
+```
 
+```
 router1# show ip route
 Codes: K - kernel route, C - connected, S - static, R - RIP,
        O - OSPF, I - IS-IS, B - BGP, A - Babel,
@@ -136,7 +139,9 @@ O>* 192.168.20.0/24 [110/20] via 192.168.30.1, vlan30, 22:45:23
   *                          via 192.168.10.2, vlan10, 22:45:23
 O   192.168.30.0/24 [110/10] is directly connected, vlan30, 22:47:08
 C>* 192.168.30.0/24 is directly connected, vlan30
+```
 
+```
 router1# show ip ospf route
 ============ OSPF network routing table ============
 N    10.10.10.0/24         [10] area: 0.0.0.1
