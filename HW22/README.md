@@ -169,15 +169,11 @@ Address:	192.168.50.10#53
 Name:	web2.dns.lab
 Address: 192.168.50.16
 
-[root@client2 vagrant]#  nslookup www.newdns.lab
+[root@client2 vagrant]# nslookup www
 Server:		192.168.50.10
 Address:	192.168.50.10#53
 
-www.newdns.lab	canonical name = web.newdns.lab.
-Name:	web.newdns.lab
-Address: 192.168.50.16
-Name:	web.newdns.lab
-Address: 192.168.50.15
+** server can't find www: NXDOMAIN
 ```
 
 ### Troubleshooting
