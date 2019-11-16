@@ -142,21 +142,20 @@ Address:	192.168.50.10#53
 
 ** server can't find web2: NXDOMAIN
 
-[root@client2 vagrant]#  nslookup www
+[root@client vagrant]# nslookup www.newdns.lab
 Server:		192.168.50.10
 Address:	192.168.50.10#53
 
-** server can't find www: NXDOMAIN
-
-[root@client2 vagrant]#  nslookup www.newdns.lab
-Server:		192.168.50.10
-Address:	192.168.50.10#53
-
-** server can't find www.newdns.lab: NXDOMAIN
+www.newdns.lab	canonical name = web.newdns.lab.
+Name:	web.newdns.lab
+Address: 192.168.50.15
+Name:	web.newdns.lab
+Address: 192.168.50.16
 ```
 
 ###### Client2
-```[root@client2 vagrant]# nslookup web1
+```
+[root@client2 vagrant]# nslookup web1
 Server:		192.168.50.10
 Address:	192.168.50.10#53
 
