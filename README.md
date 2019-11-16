@@ -41,6 +41,8 @@
 
 * [HW-21 Static & Dynamic Routing (OSPF)](HW21/README.md)
 
+* [HW-22 DNS & DHCP](HW22/README.md)
+
 
 # Инструкции
 
