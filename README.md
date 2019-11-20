@@ -43,6 +43,10 @@
 
 * [HW-22 DNS & DHCP](HW22/README.md)
 
+* [HW-23 IPV6](HW23/README.md)
+
+* [HW-24 VLAN & LACP](HW24/README.md)
+
 
 # Инструкции
 

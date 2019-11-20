@@ -1,0 +1,59 @@
+---
+- hosts: inetRouter
+  become: yes
+  tasks:
+  - name: copy bond config
+    copy: src=ifcfg-bond0.inet dest=/etc/sysconfig/network-scripts/ifcfg-bond0 owner=root group=root mode=0644
+  - name: copy bond config
+    copy: src=ifcfg-eth1.inet dest=/etc/sysconfig/network-scripts/ifcfg-eth1 owner=root group=root mode=0644
+  - name: copy bond config
+    copy: src=ifcfg-eth2.inet dest=/etc/sysconfig/network-scripts/ifcfg-eth2 owner=root group=root mode=0644
+  - name: restart
+    service: name=network state=restarted
+
+- hosts: centralRouter
+  become: yes
+  tasks:
+  - name: copy bond config
+    copy: src=ifcfg-bond0.central dest=/etc/sysconfig/network-scripts/ifcfg-bond0 owner=root group=root mode=0644
+  - name: copy bond config
+    copy: src=ifcfg-eth1.central dest=/etc/sysconfig/network-scripts/ifcfg-eth1 owner=root group=root mode=0644
+  - name: copy bond config
+    copy: src=ifcfg-eth2.central dest=/etc/sysconfig/network-scripts/ifcfg-eth2 owner=root group=root mode=0644
+  - name: restart
+    service: name=network state=restarted
+
+- hosts: testServer1
+  become: yes
+  tasks:
+  - name: copy vlan config
+    copy: src=ifcfg-vlan10.server dest=/etc/sysconfig/network-scripts/ifcfg-vlan10 owner=root group=root mode=0644
+  - name: restart
+    service: name=network state=restarted
+
+- hosts: testClient1
+  become: yes
+  tasks:
+  - name: copy vlan config
+    copy: src=ifcfg-vlan10.client dest=/etc/sysconfig/network-scripts/ifcfg-vlan10 owner=root group=root mode=0644
+
+  - name: restart
+    service: name=network state=restarted
+
+- hosts: testServer2
+  become: yes
+  tasks:
+  - name: copy vlan config
+    copy: src=ifcfg-vlan20.server dest=/etc/sysconfig/network-scripts/ifcfg-vlan20 owner=root group=root mode=0644
+
+  - name: restart
+    service: name=network state=restarted
+
+- hosts: testClient2
+  become: yes
+  tasks:
+  - name: copy vlan config
+    copy: src=ifcfg-vlan20.client dest=/etc/sysconfig/network-scripts/ifcfg-vlan20 owner=root group=root mode=0644
+
+  - name: restart
+    service: name=network state=restarted
