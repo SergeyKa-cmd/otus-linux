@@ -16,6 +16,7 @@ Vlans:
 testClient1 <-> testServer1
 testClient2 <-> testServer2
 
+![Net](./network.png?raw=true "Principal scheme")
 
 ### Check VLANS
 
@@ -253,3 +254,15 @@ Slave queue ID: 0
 
 
 ### Useful links
+
+http://xgu.ru/wiki/Linux_Bonding
+
+http://www.adminia.ru/linux-bonding-obiedinenie-setevyih-interfeysov-v-linux/
+
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/ch-configure_network_teaming
+
+https://wwwx.cs.unc.edu/~sparkst/howto/network_tuning.php
+
+https://www.centos.org/docs/5/html/5.2/Deployment_Guide/s2-sysconfig-network.html
+
+http://xgu.ru/wiki/VLAN_%D0%B2_Linux
