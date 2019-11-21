@@ -13,8 +13,8 @@ Clone repo, run `vagrant up`.
 - testServer2- 10.10.10.1
 
 Vlans:
-testClient1 <-> testServer1
-testClient2 <-> testServer2
+ * testClient1 <-> testServer1
+ * testClient2 <-> testServer2
 
 ![Net](./network.png?raw=true "Principal scheme")
 
