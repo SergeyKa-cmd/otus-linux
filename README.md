@@ -47,6 +47,7 @@
 
 * [HW-24 VLAN & LACP](HW24/README.md)
 
+* [HW-25 Bridges Tunels VPN](HW25/README.md)
 
 # Инструкции
 
