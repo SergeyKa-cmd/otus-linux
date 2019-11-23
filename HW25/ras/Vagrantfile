@@ -1,0 +1,92 @@
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+
+MACHINES = {
+:vpnras => {
+	:box_name => "centos/7",
+	#  add public
+	:public => {:ip => '192.168.1.200', :netmask => '255.255.255.0', :adapter => 2},
+	:net=> [
+			   {ip: '172.16.0.1', adapter: 3, netmask: "255.255.255.0", virtualbox__intnet: "secret_net" },
+			]
+ },
+
+ 
+}
+
+Vagrant.configure("2") do |config|
+
+  MACHINES.each do |boxname, boxconfig|
+
+    config.vm.define boxname do |box|
+
+        box.vm.box = boxconfig[:box_name]
+		box.vm.host_name = boxname.to_s
+        boxconfig[:net].each do |ipconf|
+          box.vm.network "private_network", ipconf
+        end
+        
+        if boxconfig.key?(:public)
+          box.vm.network "public_network", boxconfig[:public]
+        end
+
+		case boxname.to_s
+		when "vpnras"
+			box.vm.provision "shell", inline: <<-SHELL
+			
+			mkdir -p ~root/.ssh
+			cp ~vagrant/.ssh/auth* ~root/.ssh
+			
+			cp /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+			
+			setenforce 0 && sed -i "s/SELINUX=enforcing/SELINUX=disabled/" /etc/selinux/config 
+
+			yum install epel-release -y 
+			yum install easy-rsa -y 
+			yum install bridge-utils policycoreutils-python openvpn -y 
+			yum install sshpass -y 
+			
+			# on forwarding
+			echo -e 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf
+			sysctl -p
+			
+			# ssh passwd auth
+			sed -i '65s/^/#/' /etc/ssh/sshd_config
+			sed -i '66i PasswordAuthentication yes' /etc/ssh/sshd_config 
+			systemctl reload sshd	
+							
+
+			mkdir /var/log/openvpn # logs
+			mkdir /etc/openvpn/ccd # client custom settings
+			mkdir /etc/openvpn/keys # crypt keys
+			
+			cp /vagrant/server.conf /etc/openvpn/server 
+			
+			# # generate keys
+			cd /usr/share/easy-rsa/3/
+			./easyrsa init-pki  # init PKI (Public Key Infrastructure)
+			./easyrsa --batch build-ca nopass # create root cert nopass (with pass - ./easyrsa build-ca)
+			./easyrsa gen-dh # init DH keys
+			./easyrsa build-server-full server nopass # create cert nopass
+			./easyrsa build-client-full client01 nopass # create client cert nopass
+			openvpn --genkey --secret ta.key # init keys HMA
+			
+			# copy kets to /etc/openvpn/keys
+			cp pki/ca.crt /etc/openvpn/keys/
+			cp pki/dh.pem /etc/openvpn/keys/
+			cp pki/issued/server.crt /etc/openvpn/keys/
+			cp pki/private/server.key /etc/openvpn/keys/
+			cp ta.key /etc/openvpn/keys/
+			
+			# start openvpn-server
+			systemctl start openvpn-server@server
+			systemctl enable openvpn-server@server 
+			
+			SHELL
+		end
+		
+      end
+
+  end
+  
+end

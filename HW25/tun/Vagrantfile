@@ -1,0 +1,145 @@
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+
+MACHINES = {
+:vpnserver => {
+		:box_name => "centos/7",
+        :net => [
+					# Internal
+					{ip: '192.168.100.1', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "internal"},
+					# External
+					{ip: '192.168.252.1', adapter: 3, netmask: "255.255.255.240", virtualbox__intnet: "external"},
+                ]
+ },
+
+ :client01 => {
+		:box_name => "centos/7",
+        :net => [
+ 					# Internal
+					{ip: '192.168.101.1', adapter: 2, netmask: "255.255.255.0", virtualbox__intnet: "internal"},
+					# External
+					{ip: '192.168.252.2', adapter: 3, netmask: "255.255.255.240", virtualbox__intnet: "external"},
+                ]
+ },
+		
+}
+
+Vagrant.configure("2") do |config|
+
+  MACHINES.each do |boxname, boxconfig|
+
+    config.vm.define boxname do |box|
+
+        box.vm.box = boxconfig[:box_name]
+		box.vm.host_name = boxname.to_s
+
+        boxconfig[:net].each do |ipconf|
+          box.vm.network "private_network", ipconf
+        end
+        
+        if boxconfig.key?(:public)
+          box.vm.network "public_network", boxconfig[:public]
+        end
+
+		box.vm.provision "shell", inline: <<-SHELL
+		# For all:
+				  
+				mkdir -p ~root/.ssh
+				cp ~vagrant/.ssh/auth* ~root/.ssh
+				
+				cp /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+				
+				yum install epel-release -y 
+				yum install bridge-utils openvpn -y
+				yum install sshpass -y 
+				yum install iperf -y 
+				
+				# on forwarding
+				echo -e 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf 
+				sysctl -p
+				# ssh passwd auth
+				sed -i '65s/^/#/' /etc/ssh/sshd_config 
+				sed -i '66i PasswordAuthentication yes' /etc/ssh/sshd_config
+				systemctl reload sshd
+				
+	
+		SHELL
+		
+		case boxname.to_s
+		when "vpnserver"
+			box.vm.provision "shell", inline: <<-SHELL
+			
+			setenforce 0 && sed -i "s/SELINUX=enforcing/SELINUX=disabled/" /etc/selinux/config 
+
+			yum install easy-rsa -y # for SSL-keys
+			
+			mkdir /var/log/openvpn # logs
+			mkdir /etc/openvpn/ccd # client custom settings
+			mkdir /etc/openvpn/keys # crypt keys
+			
+			cp /vagrant/server.conf /etc/openvpn/server
+			
+			echo "iroute 192.168.101.0 255.255.255.0" > /etc/openvpn/ccd/client01 # route for client
+			
+			# generate keys
+			cd /usr/share/easy-rsa/3/
+			./easyrsa init-pki  # init PKI (Public Key Infrastructure)
+			./easyrsa --batch build-ca nopass # create root cert nopass (with pass - ./easyrsa build-ca)
+			./easyrsa gen-dh # init DH keys
+			./easyrsa build-server-full server nopass # create cert nopass
+			./easyrsa build-client-full client01 nopass # create client cert nopass
+			openvpn --genkey --secret ta.key # init keys HMAC
+			
+			# copy kets to /etc/openvpn/keys
+			cp pki/ca.crt /etc/openvpn/keys/
+			cp pki/dh.pem /etc/openvpn/keys/
+			cp pki/issued/server.crt /etc/openvpn/keys/
+			cp pki/private/server.key /etc/openvpn/keys/
+			cp ta.key /etc/openvpn/keys/
+			
+			# off default gateway for eth0 (Vagrant)
+			echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+			
+			systemctl restart network
+			systemctl restart network
+			
+			# start openvpn-server
+			systemctl start openvpn-server@server
+			systemctl enable openvpn-server@server 
+			
+			SHELL
+		
+		when "client01"
+			box.vm.provision "shell", inline: <<-SHELL
+
+			setenforce 0 && sed -i "s/SELINUX=enforcing/SELINUX=disabled/" /etc/selinux/config
+			
+			mkdir /etc/openvpn/keys 
+			
+			cp /vagrant/client.conf /etc/openvpn/client
+			
+			# copy 4 client keys on client01 in /etc/openvpn/keys
+			sshpass -p "vagrant" scp -o "StrictHostKeyChecking=no" root@192.168.252.1:/usr/share/easy-rsa/3/pki/ca.crt /etc/openvpn/keys/
+			sshpass -p "vagrant" scp -o "StrictHostKeyChecking=no" root@192.168.252.1:/usr/share/easy-rsa/3/pki/issued/client01.crt /etc/openvpn/keys/
+			sshpass -p "vagrant" scp -o "StrictHostKeyChecking=no" root@192.168.252.1:/usr/share/easy-rsa/3/pki/private/client01.key /etc/openvpn/keys/
+			sshpass -p "vagrant" scp -o "StrictHostKeyChecking=no" root@192.168.252.1:/usr/share/easy-rsa/3/ta.key /etc/openvpn/keys/			
+			
+			# off default gateway for eth0 (Vagrant)
+			echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+			
+			systemctl restart network
+			systemctl restart network
+			
+			# Start openvpn-client
+			systemctl start openvpn-client@client
+			systemctl enable openvpn-client@client
+			
+			SHELL
+	  
+		end
+
+      end
+
+  end
+  
+end
