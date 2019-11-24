@@ -49,6 +49,8 @@
 
 * [HW-25 Bridges Tunels VPN](HW25/README.md)
 
+* [HW-26 Web server](HW26/README.md)
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)
