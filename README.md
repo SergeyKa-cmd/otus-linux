@@ -51,6 +51,8 @@
 
 * [HW-26 Web server](HW26/README.md)
 
+* [HW-27 Postfix Dovecot](HW27/README.md)
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)

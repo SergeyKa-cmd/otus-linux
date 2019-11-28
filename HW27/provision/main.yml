@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: True
+  tasks:
+  - name: Add settings to /etc/hosts
+    lineinfile:
+      path: /etc/hosts
+      state: present
+      line: '192.168.101.1 {{ item.name }}'
+    with_items:
+      - { ip: "192.168.101.1", name: server.test.local }
+
+- hosts: server
+  become: True
+  roles:
+    - role: postfix
+      allowed_networks: "192.168.101.1/24"
+      listen_ip: "192.168.101.1, {{ ansible_eth0.ipv4.address }}"
+    - role: dovecot
+      user: vagrant
+      password: password

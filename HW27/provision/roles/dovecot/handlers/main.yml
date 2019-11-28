@@ -1,0 +1,8 @@
+---
+# handlers file for dovecot
+
+- name: restart dovecot
+  systemd:
+    state: restarted
+    name: dovecot
+    enabled: yes
