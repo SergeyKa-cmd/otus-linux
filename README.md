@@ -53,7 +53,7 @@
 
 * [HW-27 Postfix Dovecot](HW27/README.md)
 
-* [HW-28 Mysql (Repliction)](HW28/README.md)
+* [HW-28 Mysql (Replication)](HW28/README.md)
 
 # Инструкции
 
