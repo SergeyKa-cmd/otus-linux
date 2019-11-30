@@ -53,6 +53,8 @@
 
 * [HW-27 Postfix Dovecot](HW27/README.md)
 
+* [HW-28 Mysql (Repliction)](HW28/README.md)
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)
