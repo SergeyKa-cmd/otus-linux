@@ -7,8 +7,6 @@
 
 Clone repo, run `vagrant up`. You`ll get mysql master and replica servers.
 
-### Check status
-
 #### Check GTID and mode is ON
 
  * Master

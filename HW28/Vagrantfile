@@ -1,34 +1,95 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
 
-Vagrant.configure(2) do |config|
-    config.vm.box = "centos/7"
-  
-    config.vm.provider "virtualbox" do |v|
-        v.memory = 384
+MACHINES = {
+    :master => {
+            :box_name => "centos/7",
+#            :public => {:ip => '192.168.1.150'},
+            :net => [
+                       {ip: '192.168.11.150', netmask: "255.255.255.0", virtualbox__intnet: "mysql-servers"},
+                    ] 
+      },
+    :slave => {
+            :box_name => "centos/7",
+#            :public => {:ip => '192.168.1.151'},
+            :net => [
+                            {ip: '192.168.11.151', netmask: "255.255.255.0", virtualbox__intnet: "mysql-servers"},
+                         ]
+    },
+        
+    }
+    
+    Vagrant.configure("2") do |config|
+      MACHINES.each do |boxname, boxconfig|
+    
+        config.vm.define boxname do |box|
+    
+            box.vm.box = boxconfig[:box_name]
+            box.vm.host_name = boxname.to_s
+    
+            boxconfig[:net].each do |ipconf|
+              box.vm.network "private_network", ipconf
+            end
+            
+            if boxconfig.key?(:public)
+              box.vm.network "public_network", boxconfig[:public]
+            end
+            config.vm.synced_folder ".", "/vagrant"
+    
+            box.vm.provision "shell", inline: <<-SHELL
+            mkdir -p ~root/.ssh
+            cp ~vagrant/.ssh/auth* ~root/.ssh
+            yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm -y
+            yum install Percona-Server-server-57 -y
+            SHELL
+            
+        case boxname.to_s
+          
+        when "master"
+    
+        box.vm.provision "shell", inline: <<-SHELL
+        setenforce 0 && sed -i "s/SELINUX=enforcing/SELINUX=disabled/" /etc/selinux/config 
+        cp /vagrant/conf.d_master/* /etc/my.cnf.d/ 
+        systemctl start mysql
+        #change default password
+        def_pass=$(cat /var/log/mysqld.log | grep 'root@localhost:' | awk '{print $11}')
+        pass_db="@sdK4trB"
+        mysql -e "SET PASSWORD = PASSWORD('@sdK4trB');" --connect-expired-password -uroot -p$def_pass
+        mysql -uroot -p$pass_db -e "CREATE DATABASE bet;"
+        mysql -uroot -p$pass_db -D bet < /vagrant/bet.dmp;
+mysql -uroot -p$pass_db << EOF
+CREATE USER 'repl'@'%' IDENTIFIED BY '!OtusLinux2018';
+SELECT user,host FROM mysql.user where user='repl';
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%' IDENTIFIED BY '!OtusLinux2018';
+EOF
+        mysqldump --all-databases --triggers --routines --master-data --ignore-table=bet.events_on_demand --ignore-table=bet.v_same_event --set-gtid-purged=OFF -uroot -p$pass_db > /vagrant/master.sql
+        SHELL
+          
+        when "slave"
+          
+            box.vm.provision "shell", inline: <<-SHELL
+            setenforce 0 && sed -i "s/SELINUX=enforcing/SELINUX=disabled/" /etc/selinux/config
+            cp /vagrant/conf.d_slave/* /etc/my.cnf.d/ 
+            systemctl start mysql
+            #change default password
+            def_pass=$(cat /var/log/mysqld.log | grep 'root@localhost:' | awk '{print $11}')
+            pass_db="@sdK4trB"
+            mysql -e "SET PASSWORD = PASSWORD('@sdK4trB');" --connect-expired-password -uroot -p$def_pass
+#mysql -uroot -p$pass_db << EOF
+#SOURCE /vagrant/master.sql;
+#SHOW DATABASES LIKE 'bet';
+#USE bet;
+#SHOW TABLES;
+#EOF
+mysql -uroot -p$pass_db << EOF
+CHANGE MASTER TO MASTER_HOST = "192.168.11.150", MASTER_PORT = 3306, MASTER_USER = "repl", MASTER_PASSWORD = "!OtusLinux2018", MASTER_AUTO_POSITION = 1;
+START SLAVE;
+EOF
+
+          SHELL
+          
+        end
+            
+        end
+    
+      end
+      
     end
-  
-    config.vm.define "replica" do |replica|
-      replica.vm.network "private_network", adapter: 2, :device => "eth1", ip: "192.168.11.161"
-      replica.vm.hostname = "replica"
-    end
-  
-    config.vm.define "master" do |master|
-      master.vm.network "private_network", adapter: 2, :device => "eth1", ip: "192.168.11.160"
-      master.vm.hostname = "master"
-    end
-  
-    config.vm.provision "shell", run: "always", inline: <<-SHELL
-      mkdir -p ~root/.ssh
-      cp ~vagrant/.ssh/auth* ~root/.ssh
-      #cat /vagrant/id_rsa.pub | awk '{print $1,$2}' >> /root/.ssh/authorized_keys
-    SHELL
-  
-    config.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.playbook = "provision/startall.yml"
-      ansible.verbose = "true"
-      #ansible.become = "true"
-    end
-  
-  end
