@@ -1,0 +1,42 @@
+version: '3.1'
+
+services:
+  proxy:
+    image: perconalab/proxysql
+    ports:
+      - 3306:3306  # user interface
+      - 6032:6032  # admin interface
+#      - "3306:3306"
+#      - "6032:6032"
+    env_file: proxysql.env
+    volumes:
+      - ./add_cluster_nodes.sh:/usr/bin/add_cluster_nodes.sh
+      - ./proxysql-entry.sh:/entrypoint.sh
+
+  galera_etcd:
+#    image: 'bitnami/etcd:latest'
+    image: quay.io/coreos/etcd
+    ports:
+      - 2379:2379
+      - 2380:2380 
+      - 4001:4001 
+      - 7001:7001 
+    command:  etcd
+    volumes:
+      - /etc/ssl/certs:/etc/ssl/certs
+    env_file: etcd.env
+
+  percona-xtradb-cluster:
+    image: percona/percona-xtradb-cluster:5.7
+    env_file: galera.env
+
+
+#networks:
+#  galera:
+    # Use a custom driver
+#    driver: bridge
+#    internal: true
+#    ipam:
+#      driver: default
+#      config:
+#      - subnet: 10.20.1.0/24

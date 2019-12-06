@@ -54,6 +54,7 @@ services:
     env_file: galera.env
     deploy:
       mode: global
+#      replicas: 1
       labels: [APP=pxc]
      # service restart policy
       restart_policy:

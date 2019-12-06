@@ -8,7 +8,7 @@ fi
 
 
 if [ -z "$NODE_COUNT" ]; then
-        export NODE_COUNT=3
+        export NODE_COUNT=1
 fi
 
 
@@ -24,11 +24,12 @@ waiting_proxysql() {
 
 waiting_discovery_service() {
         status=255
-        while [ $status -gt 0 ]; do
-            echo Waiting discovery service
-            sleep 2s
-            status=$(curl -s $DISCOVERY_SERVICE 2>/dev/null 1>/dev/null; echo $?)
-        done
+#        while [ $status -gt 0 ]; do
+#            echo Waiting discovery service
+#            sleep 2s
+#            status=$(curl -s $DISCOVERY_SERVICE 2>/dev/null 1>/dev/null; echo $?)
+#	    echo "Status - $status"
+#        done
         return $(curl -s http://$DISCOVERY_SERVICE/v2/keys/pxc-cluster/$CLUSTER_NAME/ | jq -r '.node.nodes[]?.key' | awk -F'/' '{print $(NF)}' | wc -l)
 }
 
@@ -48,10 +49,12 @@ while [ 0 -eq 0 ] ; do
   waiting_proxysql
   nodes=0
   while [ $nodes -lt $NODE_COUNT ]; do
+    echo "waiting_discovery_service"
+    echo "Nodes - $nodes"
     waiting_discovery_service
     nodes=$?
   done 
   add_nodes
-  #echo waiting next update
+  echo waiting next update
   sleep $REFRESH_INTERVAL
 done
