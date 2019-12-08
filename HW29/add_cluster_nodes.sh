@@ -49,8 +49,8 @@ while [ 0 -eq 0 ] ; do
   waiting_proxysql
   nodes=0
   while [ $nodes -lt $NODE_COUNT ]; do
-    echo "waiting_discovery_service"
-    echo "Nodes - $nodes"
+#    echo "waiting_discovery_service"
+#    echo "Nodes - $nodes"
     waiting_discovery_service
     nodes=$?
   done 

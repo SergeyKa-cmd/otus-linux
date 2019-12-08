@@ -4,8 +4,8 @@ services:
   proxy:
     image: perconalab/proxysql
     ports:
-      - 3306:3306  # user interface
-      - 6032:6032  # admin interface
+      - 127.0.0.1:3306:3306  # user interface
+      - 127.0.0.1:6032:6032  # admin interface
 #      - "3306:3306"
 #      - "6032:6032"
     env_file: proxysql.env
@@ -28,6 +28,8 @@ services:
 
   percona-xtradb-cluster:
     image: percona/percona-xtradb-cluster:5.7
+    ports:
+      - 127.0.0.1:3307:3306  # user interface
     env_file: galera.env
 
 
