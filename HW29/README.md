@@ -260,6 +260,39 @@ mysql> show databases;
 7 rows in set (0.00 sec)
 ```
 
+#### Check connection from local machine
+
+```
+$ mysql -h 127.0.0.1 -P3306 -uproxyuser -p'1MySQL(Password)'
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 20
+Server version: 5.5.30 (ProxySQL)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| bet                |
+| mysql              |
+| otus               |
+| performance_schema |
+| proxytest          |
+| sys                |
++--------------------+
+7 rows in set (0.00 sec)
+
+```
+
 #### Troubleshooting
 
 * If after `docker-swarm up -d` you get no worker, run `docker-swarm up -d`  or `docker-compose scale percona-xtradb-cluster=3` againg.
