@@ -31,6 +31,13 @@ CONTAINER ID        IMAGE                                COMMAND                
 e03eecbca6d8        quay.io/coreos/etcd                  "etcd"                   3 minutes ago       Up 53 seconds       0.0.0.0:2379-2380->2379-2380/tcp, 0.0.0.0:4001->4001/tcp, 0.0.0.0:7001->7001/tcp   hw29_galera_etcd_1
 ```
 
+* You need to add monotir user to mysql. Run command on any percona-xtradb-cluster. Wait some time untill mysql startd.
+```
+$ docker exec hw29_percona-xtradb-cluster_1 /usr/bin/monitor_user_add.sh
+mysql: [Warning] Using a password on the command line interface can be insecure.
+User monitor added!
+```
+
 * Down
 ```
 $ docker-compose down
@@ -103,6 +110,32 @@ mysql> SELECT * FROM mysql_servers;
 | 0            | 172.18.0.6 | 3306 | ONLINE | 1      | 0           | 1000            | 20                  | 0       | 0              |         |
 +--------------+------------+------+--------+--------+-------------+-----------------+---------------------+---------+----------------+---------+
 3 rows in set (0.00 sec)
+
+mysql> show variables like '%monitor%'
+    -> ;
++----------------------------------------+---------+
+| Variable_name                          | Value   |
++----------------------------------------+---------+
+| mysql-monitor_enabled                  | true    |
+| mysql-monitor_connect_timeout          | 200     |
+| mysql-monitor_ping_max_failures        | 3       |
+| mysql-monitor_ping_timeout             | 1000    |
+| mysql-monitor_read_only_interval       | 1000    |
+| mysql-monitor_read_only_timeout        | 800     |
+| mysql-monitor_replication_lag_interval | 10000   |
+| mysql-monitor_replication_lag_timeout  | 1000    |
+| mysql-monitor_username                 | monitor |
+| mysql-monitor_password                 | monitor |
+| mysql-monitor_query_interval           | 60000   |
+| mysql-monitor_query_timeout            | 100     |
+| mysql-monitor_slave_lag_when_null      | 60      |
+| mysql-monitor_writer_is_also_reader    | true    |
+| mysql-monitor_history                  | 60000   |
+| mysql-monitor_connect_interval         | 20000   |
+| mysql-monitor_ping_interval            | 10000   |
++----------------------------------------+---------+
+17 rows in set (0.00 sec)
+
 ```
 
 ##### Etcd
@@ -258,6 +291,39 @@ mysql> show databases;
 | sys                |
 +--------------------+
 7 rows in set (0.00 sec)
+```
+
+#### Check connection from local machine
+
+```
+$ mysql -h 127.0.0.1 -P3306 -uproxyuser -p'1MySQL(Password)'
+mysql: [Warning] Using a password on the command line interface can be insecure.
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 20
+Server version: 5.5.30 (ProxySQL)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| bet                |
+| mysql              |
+| otus               |
+| performance_schema |
+| proxytest          |
+| sys                |
++--------------------+
+7 rows in set (0.00 sec)
+
 ```
 
 #### Troubleshooting
