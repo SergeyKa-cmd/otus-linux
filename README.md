@@ -57,6 +57,8 @@
 
 * [HW-29 Mysql cluster](HW29/README.md)
 
+* [HW-30 PostgreSql replication](HW30/README.md)
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)
