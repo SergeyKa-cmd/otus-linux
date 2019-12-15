@@ -1,0 +1,27 @@
+---
+
+    - hosts: master
+      become: true
+#      vars_files: vars.yml
+      roles:
+        - packages
+        - postgres
+        - barman_cli
+        - master_config
+    
+    - hosts: slave
+      become: true
+#      vars_files: vars.yml
+      roles:
+        - packages
+        - postgres
+        - standby_config
+    
+    - hosts: backup
+      become: true
+#      vars_files: vars.yml
+      roles:
+        - packages
+        - postgres
+        - barman
+        - barman_config
