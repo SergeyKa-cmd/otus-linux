@@ -7,7 +7,7 @@
 
 Clone repo, run `vagrant up`. 
 
-------------------------
+
 | Name  | IP           |
 |-------|--------------|
 |master	|192.168.100.10|
@@ -104,6 +104,8 @@ slot_name = barman
 path_prefix = /usr/pgsql-11/bin
 ```
 
+------------------------
+
 ### Check replication
 
 * Create DB and table wih data on master server.
@@ -143,6 +145,8 @@ test_db=# SELECT * FROM companies ;
  Otus
 (1 row)
 ```
+
+------------------------
 
 ### Barman backup
 
