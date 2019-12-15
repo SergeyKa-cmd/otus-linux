@@ -7,17 +7,19 @@
 
 Clone repo, run `vagrant up`. 
 
+------------------------
 | Name  | IP           |
 ------------------------
 |master	|192.168.100.10|
 |slave	|192.168.100.11|
 |backup |192.168.100.12|
+------------------------
 
 ### Stend config
 
 #### Master server
 
-`/var/lib/pgsql/11/data/pg_hba.conf` 
+* `/var/lib/pgsql/11/data/pg_hba.conf` 
 ```
 # PostgreSQL Client Authentication Configuration File
 # ===================================================
@@ -32,7 +34,7 @@ host    replication     repluser     192.168.100.11/32          md5
 host    replication     streaming_barman 192.168.100.12/32 md5
 ```
 
-`/var/lib/pgsql/11/data/postgresql.conf`
+* `/var/lib/pgsql/11/data/postgresql.conf`
 ```
 listen_addresses = '*'
 
@@ -62,13 +64,13 @@ archive_command = 'cp -i %p /var/lib/pgsql/11/data/archive/%f'
 
 #### Standby server
 
-`/var/lib/pgsql/11/data/postgresql.conf`
+* `/var/lib/pgsql/11/data/postgresql.conf`
 ```
 listen_addresses = '*'
 hot_standby = on
 ```
 
-`/var/lib/pgsql/11/data/postgresql.conf`
+* `/var/lib/pgsql/11/data/postgresql.conf`
 ```
 listen_addresses = '*'
 hot_standby = on[root@slave vagrant]# cat /var/lib/pgsql/11/data/recovery.conf
@@ -79,7 +81,7 @@ primary_slot_name = 'standby_slot'
 
 #### Barman server
 
-`/etc/barman.conf`
+* `/etc/barman.conf`
 ```
 [barman]
 barman_user = barman
@@ -90,7 +92,7 @@ log_level = INFO
 ;compression = gzip
 ```
 
-`/etc/barman.d/main.conf`
+* `/etc/barman.d/main.conf`
 ```
 [192.168.100.10]
 description =  "PostgreSQL Database"
