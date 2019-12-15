@@ -2,7 +2,6 @@
 
     - hosts: master
       become: true
-#      vars_files: vars.yml
       roles:
         - packages
         - postgres
@@ -11,7 +10,6 @@
     
     - hosts: slave
       become: true
-#      vars_files: vars.yml
       roles:
         - packages
         - postgres
@@ -19,7 +17,6 @@
     
     - hosts: backup
       become: true
-#      vars_files: vars.yml
       roles:
         - packages
         - postgres
