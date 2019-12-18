@@ -186,35 +186,112 @@ Server 192.168.100.10:
 
 * Run backup
 ```
-[root@backup vagrant]# sudo barman backup 192.168.100.10
-Starting backup using postgres method for server 192.168.100.10 in /var/lib/barman/192.168.100.10/base/20191215T125820
-Backup start at LSN: 0/4000060 (000000010000000000000004, 00000060)
-Starting backup copy via pg_basebackup for 20191215T125820
-Copy done (time: 1 second)
+[root@backup vagrant]# sudo barman backup 192.168.100.10 --wait
+Starting backup using postgres method for server 192.168.100.10 in /var/lib/barman/192.168.100.10/base/20191218T104029
+Backup start at LSN: 0/130000C8 (000000010000000000000013, 000000C8)
+Starting backup copy via pg_basebackup for 20191218T104029
+Copy done (time: 2 seconds)
 Finalising the backup.
-This is the first backup for server 192.168.100.10
-WAL segments preceding the current backup have been found:
-	000000010000000000000003 from server 192.168.100.10 has been removed
-Backup size: 94.0 MiB
-Backup end at LSN: 0/6000000 (000000010000000000000005, 00000000)
-Backup completed (start time: 2019-12-15 12:58:20.571059, elapsed time: 2 seconds)
+Backup size: 326.6 MiB
+Backup end at LSN: 0/15000000 (000000010000000000000014, 00000000)
+Backup completed (start time: 2019-12-18 10:40:29.762023, elapsed time: 2 seconds)
+Waiting for the WAL file 000000010000000000000014 from server '192.168.100.10'
 Processing xlog segments from streaming for 192.168.100.10
-	000000010000000000000004
-WARNING: IMPORTANT: this backup is classified as WAITING_FOR_WALS, meaning that Barman has not received yet all the required WAL files for the backup consistency.
-This is a common behaviour in concurrent backup scenarios, and Barman automatically set the backup as DONE once all the required WAL files have been archived.
-Hint: execute the backup command with '--wait'
+        000000010000000000000012
+        000000010000000000000013
+Processing xlog segments from streaming for 192.168.100.10
+        000000010000000000000014
 ```
 
 * Check backup dir.
 ```
 [root@backup vagrant]# ls -l /var/lib/barman/192.168.100.10/
 total 4
-drwxr-xr-x. 3 barman barman 29 Dec 15 12:58 base
-drwxr-xr-x. 2 barman barman  6 Dec 15 12:58 errors
--rw-r--r--. 1 barman barman 64 Dec 15 12:58 identity.json
-drwxr-xr-x. 2 barman barman  6 Dec 15 12:58 incoming
-drwxr-xr-x. 2 barman barman 78 Dec 15 12:58 streaming
-drwxr-xr-x. 2 barman barman 21 Dec 15 12:58 wals
+drwxr-xr-x. 7 barman barman 121 Dec 18 10:40 base
+drwxr-xr-x. 2 barman barman   6 Dec 18 10:20 errors
+-rw-r--r--. 1 barman barman  64 Dec 18 10:20 identity.json
+drwxr-xr-x. 2 barman barman   6 Dec 18 10:20 incoming
+drwxr-xr-x. 2 barman barman  46 Dec 18 10:40 streaming
+drwxr-xr-x. 3 barman barman  45 Dec 18 10:40 wals
+```
+
+* Show server params
+```
+[root@backup vagrant]# barman show-server 192.168.100.10
+Server 192.168.100.10:
+        active: True
+        archive_timeout: 0
+        archiver: False
+        archiver_batch_size: 0
+        backup_directory: /var/lib/barman/192.168.100.10
+        backup_method: postgres
+        backup_options: BackupOptions(['concurrent_backup'])
+        bandwidth_limit: None
+        barman_home: /var/lib/barman
+        barman_lock_directory: /var/lib/barman
+        basebackup_retry_sleep: 30
+        basebackup_retry_times: 0
+...
+```
+
+* Recovery (you should setup ssh-key auth between barman ans master)
+
+```
+[root@backup vagrant]# barman list-backup 192.168.100.10
+192.168.100.10 20191218T145011 - Wed Dec 18 14:50:12 2019 - Size: 118.7 MiB - WAL Size: 0 B
+
+[root@backup vagrant]# barman show-backup 192.168.100.10 20191218T145011
+Backup 20191218T145011:
+  Server Name            : 192.168.100.10
+  System Id              : 6771789205388191330
+  Status                 : DONE
+  PostgreSQL Version     : 110006
+  PGDATA directory       : /var/lib/pgsql/11/data
+
+  Base backup information:
+    Disk usage           : 102.7 MiB (118.7 MiB with WALs)
+    Incremental size     : 102.7 MiB (-0.00%)
+    Timeline             : 1
+    Begin WAL            : 000000010000000000000006
+    End WAL              : 000000010000000000000006
+    WAL number           : 1
+    Begin time           : 2019-12-18 14:50:11+00:00
+    End time             : 2019-12-18 14:50:12.913720+00:00
+    Copy time            : 1 second
+    Estimated throughput : 56.1 MiB/s
+    Begin Offset         : 40
+    End Offset           : 0
+    Begin LSN           : 0/6000028
+    End LSN             : 0/7000000
+
+  WAL information:
+    No of files          : 0
+    Disk usage           : 0 B
+    Last available       : 000000010000000000000006
+
+  Catalog information:
+    Retention Policy     : not enforced
+    Previous Backup      : - (this is the oldest base backup)
+    Next Backup          : - (this is the latest base backup)
+
+[root@backup vagrant]# barman recover 192.168.100.10 20191218T145011 /var/lib/pgsql/11/data --remote-ssh-command "ssh postgres@192.168.100.10"
+Starting remote restore for server 192.168.100.10 using backup 20191218T145011
+Destination directory: /var/lib/pgsql/11/data
+Remote command: ssh postgres@192.168.100.10
+Using safe horizon time for smart rsync copy: 2019-12-18 14:50:11+00:00
+Copying the base backup.
+Copying required WAL segments.
+Generating archive status files
+Identify dangerous settings in destination directory.
+
+IMPORTANT
+These settings have been modified to prevent data losses
+
+postgresql.conf line 20: archive_command = false
+
+Recovery completed (start time: 2019-12-18 16:02:54.388917, elapsed time: 22 seconds)
+
+Your PostgreSQL server has been successfully prepared for recovery!
 ```
 
 ### Useful links
