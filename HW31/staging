@@ -1,7 +1,0 @@
-[db]
-dbdc1-mt-db01 ansible_host=13.48.80.25 ansible_user=lalbrecht
-dbdc2-mt-db01 ansible_host=13.48.101.204 ansible_user=lalbrecht
-
-[backup]
-backupdc1
-backupdc2

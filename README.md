@@ -59,6 +59,8 @@
 
 * [HW-30 PostgreSql replication](HW30/README.md)
 
+* [HW-31 PostgreSql cluster (Patroni Consul)](HW31/README.md)
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)
