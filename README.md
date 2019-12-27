@@ -61,6 +61,13 @@
 
 * [HW-31 PostgreSql cluster (Patroni Consul)](HW31/README.md)
 
+* [HW-32 Redis Memcached RabbitMQ](HW32/README.md)
+
+* [HW-33 Dynamic web content](HW33/README.md)
+
+* [HW-34 NFS SMB FTP](HW34/README.md)
+
+
 # Инструкции
 
 * [Как начать Git](git_quick_start.md)
