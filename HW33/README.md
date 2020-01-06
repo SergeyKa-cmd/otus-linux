@@ -9,8 +9,9 @@ Clone repo, run `vagrant up`.
 
 Check this ports http://VMIP:[port]
 
-| Port | App |
---------------
+
+| Port | App   |
+|------|--------|
 | 8080 | TomCat |
 | 8081 | Go |
 | 8082 | Ruby |
